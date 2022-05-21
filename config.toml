@@ -1,0 +1,55 @@
+baseurl = "https://youkale.github.io"
+title = "(-> c r u d)"
+theme = "hugo-coder"
+languagecode = "zh"
+
+[params]
+  author = "Youkale"
+  info = "摸鱼未遂"
+  description = "一个摸鱼的CRUDer仔"
+  keywords = "blog,developer,personal"
+  #gravatar = "john.doe@example.com"
+
+
+  enableTwemoji = true
+
+  colorScheme = "auto"
+  hidecolorschemetoggle = false
+
+
+  pygmentsstyle = "bw"
+  pygmentscodefences = true
+  pygmentscodefencesguesssyntax = true
+
+[taxonomies]
+  category = "categories"
+  series = "series"
+  tag = "tag"
+  author = "authors"
+
+# Social links
+[[params.social]]
+  name = "Github"
+  icon = "fa fa-github fa-2x"
+  weight = 1
+  url = "https://github.com/youkale/"
+[[params.social]]
+  name = "Gitlab"
+  icon = "fa fa-gitlab fa-2x"
+  weight = 2
+  url = "https://gitlab.com/johndoe/"
+[[params.social]]
+  name = "Twitter"
+  icon = "fa fa-twitter fa-2x"
+  weight = 3
+  url = "https://twitter.com/johndoe/"
+
+
+[[menu.main]]
+  name = "文章"
+  weight = 1
+  url  = "posts/"
+[[menu.main]]
+  name = "关于"
+  weight = 2
+  url = "about/"

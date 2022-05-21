@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>如何优雅的读取流 - CURDer</title>
+  <meta name="description" content="Java中关于InputStream读取很多人立马就想到下面的写法:
+ InputStream inputStream = null;  InputStreamReader reader = null;  BufferedReader bufferedReader = null;  try {  inputStream = new FileInputStream(&#34;/home/0x1024/1024.txt&#34;);  reader = new InputStreamReader(inputStream);  bufferedReader = new BufferedReader(reader);  String temp;  StringBuilder sb = new StringBuilder();  while (null != (temp = bufferedReader.readLine())) {  sb.append(temp);  }  System.out.print(sb.toString());  } catch (IOException e) {  e.printStackTrace();  } finally {  if (null !"><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "CURDer",
+    
+    "url": "https:\/\/youkele.github.io\/"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "https:\/\/youkele.github.io\/"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "https:\/\/youkele.github.io\/",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "https:\/\/youkele.github.io\/posts\/how-to-read-the-stream-gracefully\/",
+          "name": "如何优雅的读取流"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : ""
+  },
+  "headline": "如何优雅的读取流",
+  "description" : "Java中关于InputStream读取很多人立马就想到下面的写法:\n InputStream inputStream = null;  InputStreamReader reader = null;  BufferedReader bufferedReader = null;  try {  inputStream = new FileInputStream(\u0026#34;\/home\/0x1024\/1024.txt\u0026#34;);  reader = new InputStreamReader(inputStream);  bufferedReader = new BufferedReader(reader);  String temp;  StringBuilder sb = new StringBuilder();  while (null != (temp = bufferedReader.readLine())) {  sb.append(temp);  }  System.out.print(sb.toString());  } catch (IOException e) {  e.printStackTrace();  } finally {  if (null !",
+  "inLanguage" : "en",
+  "wordCount":  198 ,
+  "datePublished" : "2016-06-22T23:50:00",
+  "dateModified" : "2016-06-22T23:50:00",
+  "image" : "https:\/\/youkele.github.io\/",
+  "keywords" : [ "" ],
+  "mainEntityOfPage" : "https:\/\/youkele.github.io\/posts\/how-to-read-the-stream-gracefully\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "https:\/\/youkele.github.io\/",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "https:\/\/youkele.github.io\/",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
+
+<meta property="og:title" content="如何优雅的读取流" />
+<meta property="og:description" content="Java中关于InputStream读取很多人立马就想到下面的写法:
+ InputStream inputStream = null;  InputStreamReader reader = null;  BufferedReader bufferedReader = null;  try {  inputStream = new FileInputStream(&#34;/home/0x1024/1024.txt&#34;);  reader = new InputStreamReader(inputStream);  bufferedReader = new BufferedReader(reader);  String temp;  StringBuilder sb = new StringBuilder();  while (null != (temp = bufferedReader.readLine())) {  sb.append(temp);  }  System.out.print(sb.toString());  } catch (IOException e) {  e.printStackTrace();  } finally {  if (null !">
+<meta property="og:url" content="https://youkele.github.io/posts/how-to-read-the-stream-gracefully/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="CURDer" />
+
+  <meta name="twitter:title" content="如何优雅的读取流" />
+  <meta name="twitter:description" content="Java中关于InputStream读取很多人立马就想到下面的写法:
+ InputStream inputStream = null;  InputStreamReader reader = null;  BufferedReader bufferedReader = null;  try {  inputStream = new …">
+  <meta name="twitter:card" content="summary" />
+  <meta name="generator" content="Hugo 0.99.1" />
+  <link rel="alternate" href="https://youkele.github.io/index.xml" type="application/rss+xml" title="CURDer"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="https://youkele.github.io/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" /><link rel="stylesheet" href="https://youkele.github.io/css/syntax.css" /><link rel="stylesheet" href="https://youkele.github.io/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://youkele.github.io/">CURDer</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="posts-heading">
+              
+                <h1>如何优雅的读取流</h1>
+              
+              
+                <hr class="small">
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>Java中关于InputStream读取很多人立马就想到下面的写法:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>        InputStream inputStream <span style="color:#f92672">=</span> null;
+</span></span><span style="display:flex;"><span>        InputStreamReader reader <span style="color:#f92672">=</span> null;
+</span></span><span style="display:flex;"><span>        BufferedReader bufferedReader <span style="color:#f92672">=</span> null;
+</span></span><span style="display:flex;"><span>        try <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            inputStream <span style="color:#f92672">=</span> new FileInputStream<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/home/0x1024/1024.txt&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>            reader <span style="color:#f92672">=</span> new InputStreamReader<span style="color:#f92672">(</span>inputStream<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>            bufferedReader <span style="color:#f92672">=</span> new BufferedReader<span style="color:#f92672">(</span>reader<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>            String temp;
+</span></span><span style="display:flex;"><span>            StringBuilder sb <span style="color:#f92672">=</span> new StringBuilder<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>null !<span style="color:#f92672">=</span> <span style="color:#f92672">(</span>temp <span style="color:#f92672">=</span> bufferedReader.readLine<span style="color:#f92672">()))</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                sb.append<span style="color:#f92672">(</span>temp<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            System.out.print<span style="color:#f92672">(</span>sb.toString<span style="color:#f92672">())</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span> catch <span style="color:#f92672">(</span>IOException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            e.printStackTrace<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span> finally <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>null !<span style="color:#f92672">=</span> inputStream<span style="color:#f92672">){</span>
+</span></span><span style="display:flex;"><span>                inputStream.close<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>null !<span style="color:#f92672">=</span> reader<span style="color:#f92672">){</span>
+</span></span><span style="display:flex;"><span>                reader.close<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>null !<span style="color:#f92672">=</span> bufferedReader<span style="color:#f92672">){</span>
+</span></span><span style="display:flex;"><span>                bufferedReader.close<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>下面这几个类都实现了Closeable,所以读取完毕后都需要关闭。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>        InputStream inputStream
+</span></span><span style="display:flex;"><span>        InputStreamReader reader;
+</span></span><span style="display:flex;"><span>        BufferedReader bufferedReader;
+</span></span></code></pre></div><p>最终读取成功失败与否，还需要将这个流关闭掉,然后又是一陀臃肿的代码</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>null !<span style="color:#f92672">=</span> inputStream<span style="color:#f92672">){</span>
+</span></span><span style="display:flex;"><span>                inputStream.close<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>null !<span style="color:#f92672">=</span> reader<span style="color:#f92672">){</span>
+</span></span><span style="display:flex;"><span>                reader.close<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>null !<span style="color:#f92672">=</span> bufferedReader<span style="color:#f92672">){</span>
+</span></span><span style="display:flex;"><span>                bufferedReader.close<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>很多朋友估计每天都在承受这样的痛苦，不过自从JDK7发布以来，Closeable接口扩展了一个叫AutoCloseable的接口.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>public interface Closeable extends AutoCloseable <span style="color:#f92672">{</span>    
+</span></span><span style="display:flex;"><span>        void close<span style="color:#f92672">()</span> throws IOException;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>那么上面的这个文件读取可以很C#地写出:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>     try <span style="color:#f92672">(</span>InputStream inputStream <span style="color:#f92672">=</span> new FileInputStream<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/home/0x1024/1024.txt&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>             InputStreamReader reader <span style="color:#f92672">=</span> new InputStreamReader<span style="color:#f92672">(</span>inputStream<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>             BufferedReader bufferedReader <span style="color:#f92672">=</span> new BufferedReader<span style="color:#f92672">(</span>reader<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            String temp;
+</span></span><span style="display:flex;"><span>            StringBuilder sb <span style="color:#f92672">=</span> new StringBuilder<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>null !<span style="color:#f92672">=</span> <span style="color:#f92672">(</span>temp <span style="color:#f92672">=</span> bufferedReader.readLine<span style="color:#f92672">()))</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                sb.append<span style="color:#f92672">(</span>temp<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            System.out.print<span style="color:#f92672">(</span>sb.toString<span style="color:#f92672">())</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>catch <span style="color:#f92672">(</span>IOException e<span style="color:#f92672">){</span>
+</span></span><span style="display:flex;"><span>            e.printStackTrace<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>这样就完了吗???现在都已经JDK8了, 好的常用类都扩展了Steam,比如BufferedReader,有一个public Stream<!-- raw HTML omitted --> lines()方法,那么上面的的代码就可以更优雅了.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>    try <span style="color:#f92672">(</span>InputStream inputStream <span style="color:#f92672">=</span> new FileInputStream<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/home/0x1024/1024.txt&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>             InputStreamReader reader <span style="color:#f92672">=</span> new InputStreamReader<span style="color:#f92672">(</span>inputStream<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>             BufferedReader bufferedReader <span style="color:#f92672">=</span> new BufferedReader<span style="color:#f92672">(</span>reader<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            System.out.println<span style="color:#f92672">(</span>bufferedReader.lines<span style="color:#f92672">()</span>.collect<span style="color:#f92672">(</span>Collectors.joining<span style="color:#f92672">()))</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>catch <span style="color:#f92672">(</span>IOException e<span style="color:#f92672">){</span>
+</span></span><span style="display:flex;"><span>            e.printStackTrace<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>是的，你没看错。。。就那么点代码了！！！</p>
+<p>只要你的jdk是7以上，只要实现了Closeable就可以用 try(&hellip;){&hellip;} 的方式撸代码了.</p>
+<h3 id="后话">后话</h3>
+<p>更偷懒的朋友可能会这样写:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>        try <span style="color:#f92672">(</span>BufferedReader bufferedReader <span style="color:#f92672">=</span> new BufferedReader<span style="color:#f92672">(</span>new InputStreamReader<span style="color:#f92672">(</span>new FileInputStream<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/home/0x1024/1024.txt&#34;</span><span style="color:#f92672">))))</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            System.out.println<span style="color:#f92672">(</span>bufferedReader.lines<span style="color:#f92672">()</span>.collect<span style="color:#f92672">(</span>Collectors.joining<span style="color:#f92672">()))</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>catch <span style="color:#f92672">(</span>IOException e<span style="color:#f92672">){</span>
+</span></span><span style="display:flex;"><span>            e.printStackTrace<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>那么我告诉你，这样写是不正确的，详情请阅读:《JAVA程序员修炼之道》</p>
+
+
+        
+
+        
+
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://youkele.github.io/posts/ngrok-compile-problem/" data-toggle="tooltip" data-placement="top" title="Ngrok 编译的坑">&larr; Previous Post</a>
+            </li>
+          
+          
+            <li class="next">
+              <a href="https://youkele.github.io/posts/fans-mall-user-relation/" data-toggle="tooltip" data-placement="top" title="微商锁粉重构思路">Next Post &rarr;</a>
+            </li>
+          
+        </ul>
+      
+
+
+      
+
+    </div>
+  </div>
+</div>
+
+      
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2021
+          
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://youkele.github.io/">CURDer</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="https://gohugo.io">Hugo v0.99.1</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="https://youkele.github.io/js/main.js"></script><script> renderMathInElement(document.body); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="https://youkele.github.io/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+
+
+    
+  </body>
+</html>
+

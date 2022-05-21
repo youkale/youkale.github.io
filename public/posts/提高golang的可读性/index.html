@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>如何提高golang的可读性 - CURDer</title>
+  <meta name="description" content="1. 尽早返回 反例:
+//UserCtrl func UserInfo(userId string){  user.UserInfo(userId)  ....  ....  //resp result ... }  //UserService func UserInfo(userId string){  if len(userId) &gt; 0 {  //do query database  .....  } } // repo func queryUserInfo(userId string){  if len(userId) &gt; 0{  //select * from user where user_id = ?  } } 从这个例子来看，在service层和数据库查询，我们都进行了userId的判断. 因为当我们经常会忘记，我们是否在上一层入参的时候进行了userId为空的判断. 为了避免空指针，我们不得已一层层进行判断.
+假如我们尽早地返回，那么就可以避免后续的层层判空
+推荐写法:
+//userCtrl func UserInfo(userId string){  if len(userId) == 0 {  //resp some error  }  user."><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "CURDer",
+    
+    "url": "https:\/\/youkele.github.io\/"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "https:\/\/youkele.github.io\/"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "https:\/\/youkele.github.io\/",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "https:\/\/youkele.github.io\/posts\/%E6%8F%90%E9%AB%98golang%E7%9A%84%E5%8F%AF%E8%AF%BB%E6%80%A7\/",
+          "name": "如何提高golang的可读性"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : ""
+  },
+  "headline": "如何提高golang的可读性",
+  "description" : "1. 尽早返回 反例:\n\/\/UserCtrl func UserInfo(userId string){  user.UserInfo(userId)  ....  ....  \/\/resp result ... }  \/\/UserService func UserInfo(userId string){  if len(userId) \u0026gt; 0 {  \/\/do query database  .....  } } \/\/ repo func queryUserInfo(userId string){  if len(userId) \u0026gt; 0{  \/\/select * from user where user_id = ?  } } 从这个例子来看，在service层和数据库查询，我们都进行了userId的判断. 因为当我们经常会忘记，我们是否在上一层入参的时候进行了userId为空的判断. 为了避免空指针，我们不得已一层层进行判断.\n假如我们尽早地返回，那么就可以避免后续的层层判空\n推荐写法:\n\/\/userCtrl func UserInfo(userId string){  if len(userId) == 0 {  \/\/resp some error  }  user.",
+  "inLanguage" : "en",
+  "wordCount":  492 ,
+  "datePublished" : "2019-03-30T18:55:00",
+  "dateModified" : "2019-03-30T18:55:00",
+  "image" : "https:\/\/youkele.github.io\/",
+  "keywords" : [ "" ],
+  "mainEntityOfPage" : "https:\/\/youkele.github.io\/posts\/%E6%8F%90%E9%AB%98golang%E7%9A%84%E5%8F%AF%E8%AF%BB%E6%80%A7\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "https:\/\/youkele.github.io\/",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "https:\/\/youkele.github.io\/",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
+
+<meta property="og:title" content="如何提高golang的可读性" />
+<meta property="og:description" content="1. 尽早返回 反例:
+//UserCtrl func UserInfo(userId string){  user.UserInfo(userId)  ....  ....  //resp result ... }  //UserService func UserInfo(userId string){  if len(userId) &gt; 0 {  //do query database  .....  } } // repo func queryUserInfo(userId string){  if len(userId) &gt; 0{  //select * from user where user_id = ?  } } 从这个例子来看，在service层和数据库查询，我们都进行了userId的判断. 因为当我们经常会忘记，我们是否在上一层入参的时候进行了userId为空的判断. 为了避免空指针，我们不得已一层层进行判断.
+假如我们尽早地返回，那么就可以避免后续的层层判空
+推荐写法:
+//userCtrl func UserInfo(userId string){  if len(userId) == 0 {  //resp some error  }  user.">
+<meta property="og:url" content="https://youkele.github.io/posts/%E6%8F%90%E9%AB%98golang%E7%9A%84%E5%8F%AF%E8%AF%BB%E6%80%A7/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="CURDer" />
+
+  <meta name="twitter:title" content="如何提高golang的可读性" />
+  <meta name="twitter:description" content="1. 尽早返回 反例:
+//UserCtrl func UserInfo(userId string){  user.UserInfo(userId)  ....  ....  //resp result ... }  //UserService func UserInfo(userId string){  if len(userId) &gt; 0 {  //do query database …">
+  <meta name="twitter:card" content="summary" />
+  <meta name="generator" content="Hugo 0.99.1" />
+  <link rel="alternate" href="https://youkele.github.io/index.xml" type="application/rss+xml" title="CURDer"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="https://youkele.github.io/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" /><link rel="stylesheet" href="https://youkele.github.io/css/syntax.css" /><link rel="stylesheet" href="https://youkele.github.io/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://youkele.github.io/">CURDer</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="posts-heading">
+              
+                <h1>如何提高golang的可读性</h1>
+              
+              
+                <hr class="small">
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <h2 id="1-尽早返回">1. 尽早返回</h2>
+<p>反例:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">//UserCtrl
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">UserInfo</span>(<span style="color:#a6e22e">userId</span> <span style="color:#66d9ef">string</span>){
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">user</span>.<span style="color:#a6e22e">UserInfo</span>(<span style="color:#a6e22e">userId</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">...</span>.
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">...</span>.
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">//resp result ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//UserService
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">UserInfo</span>(<span style="color:#a6e22e">userId</span> <span style="color:#66d9ef">string</span>){
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">userId</span>) &gt; <span style="color:#ae81ff">0</span> { 
+</span></span><span style="display:flex;"><span>  	<span style="color:#75715e">//do query database 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">...</span>..
+</span></span><span style="display:flex;"><span>  } 
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// repo
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">queryUserInfo</span>(<span style="color:#a6e22e">userId</span> <span style="color:#66d9ef">string</span>){
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">userId</span>) &gt; <span style="color:#ae81ff">0</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//select * from user where user_id = ?
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>从这个例子来看，在service层和数据库查询，我们都进行了userId的判断. 因为当我们经常会忘记，我们是否在上一层入参的时候进行了userId为空的判断. 为了避免空指针，我们不得已一层层进行判断.</p>
+<p>假如我们尽早地返回，那么就可以避免后续的层层判空</p>
+<p>推荐写法:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">//userCtrl
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">UserInfo</span>(<span style="color:#a6e22e">userId</span> <span style="color:#66d9ef">string</span>){
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">userId</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//resp some error
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">user</span>.<span style="color:#a6e22e">UserInfo</span>(<span style="color:#a6e22e">userId</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="2-写好分支语句">2. 写好分支语句</h2>
+<p>反例:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">xxx</span>(<span style="color:#a6e22e">lang</span> <span style="color:#66d9ef">string</span>){
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">lang</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;java&#34;</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">doA</span>()
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">doB</span>()
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">lang</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;java&#34;</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">doC</span>()
+</span></span><span style="display:flex;"><span>  }<span style="color:#66d9ef">else</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">doD</span>()
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>推荐写法:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">java</span>(<span style="color:#a6e22e">lang</span> <span style="color:#66d9ef">string</span>){
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doA</span>()
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doC</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">other</span>(<span style="color:#a6e22e">lang</span> <span style="color:#66d9ef">string</span>){
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doB</span>()
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doC</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>if都需要包含else</p>
+<p>反例:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">cmd</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;1&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">status</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">doSome</span>()
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}<span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">tag</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">doSomeB</span>()
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>推荐写法:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">cmd</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;1&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">status</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>  }<span style="color:#66d9ef">else</span>{
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}<span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">tag</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>{
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>  }<span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>避免啰嗦的条件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">isDone</span>() <span style="color:#f92672">==</span> <span style="color:#66d9ef">true</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">do</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>推荐:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">isDone</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doSome</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>使用switch语句</p>
+<p>反例:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">lang</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;java&#34;</span>{
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>}<span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">lang</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;c#&#34;</span> {
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>}<span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">lang</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;clojure&#34;</span>{
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>推荐写法:</p>
+<pre tabindex="0"><code>switch lang:
+case &#34;java&#34;:
+case &#34;c#&#34;:
+case &#34;clojure&#34;:
+</code></pre><p>减少逻辑表达式:</p>
+<p>逻辑表达式是门电路的表达式，总会有人不能记得他的先后执行顺序。</p>
+<p>反例:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">lang</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;java&#34;</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">lang</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;c#&#34;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">lang</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;clojure&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doSome</span>()
+</span></span><span style="display:flex;"><span>} 
+</span></span></code></pre></div><p>如果非得使用逻辑表达式，推荐使用括号，显示地说明调用的顺序.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">lang</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;java&#34;</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">lang</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;c#&#34;</span>) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">lang</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;clojure&#34;</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doSome</span>()
+</span></span><span style="display:flex;"><span>} 
+</span></span></code></pre></div><p>使用正序的逻辑</p>
+<p>反例:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">isUserInfoSaved</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doA</span>()
+</span></span><span style="display:flex;"><span>}<span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doB</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">isNotStop</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doSome</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>用一个符合人类思考顺序方式来写分支，减少阅读代码时的时间</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">isUserInfoSaved</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doB</span>()
+</span></span><span style="display:flex;"><span>}<span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doA</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">isStart</span>(){
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doSome</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="3合理使用局部变量">3.合理使用局部变量</h2>
+<p>可能我们知道定义一个变量会开辟一块新的内存，有时候觉得自己重复使用一个变量，会让性能&quot;好一些&quot;, 于是我们就会写出下面的代码</p>
+<p>反例:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">name</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">login</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">name</span> = <span style="color:#e6db74">&#34;user&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doSome</span>(<span style="color:#a6e22e">name</span>)
+</span></span><span style="display:flex;"><span>}<span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">name</span> = <span style="color:#e6db74">&#34;guest&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doSome</span>(<span style="color:#a6e22e">name</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>其实在栈上开辟内存的成本很低，编译器会对代码进行逃逸分析，而且执行完这个方法后，内存就会被回收掉，所以不用担心这个性能问题.</p>
+<p>推荐写法:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">login</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//使用局部变量
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">name</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;user&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doSome</span>(<span style="color:#a6e22e">name</span>)
+</span></span><span style="display:flex;"><span>}<span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">name</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;guest&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">doSome</span>(<span style="color:#a6e22e">name</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>有的时候我们会想耍个酷，那么牛逼的调用一行代码就写完了，可是这时候阅读起来是非常痛苦的一件事情.</p>
+<p>反例:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">saveXXX</span>(<span style="color:#a6e22e">queryRole</span>(),<span style="color:#a6e22e">queryOrder</span>(),<span style="color:#a6e22e">saveXXX</span>(<span style="color:#a6e22e">queryUserInfo</span>(<span style="color:#a6e22e">genUserId</span>())))
+</span></span></code></pre></div><p>推荐写法：</p>
+<p>我们把参数通过一个中间变量存起来，这样会很明显地说明，我们都干了些什么.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">userInfo</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">queryUserInfo</span>(<span style="color:#a6e22e">genUserId</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">u</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">saveXXX</span>(<span style="color:#a6e22e">userInfo</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">saveXXX</span>(<span style="color:#a6e22e">queryRole</span>(),<span style="color:#a6e22e">queryOrder</span>(),<span style="color:#a6e22e">u</span>)
+</span></span></code></pre></div><h2 id="4循环">4.循环</h2>
+<p>循环本身就不好读，假如在循环中包含continue,break之类的，让原本的代码更难读</p>
+<p>反例:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span>,<span style="color:#a6e22e">itm</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">Users</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">item</span>.<span style="color:#a6e22e">Name</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;admin&#34;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">continue</span>
+</span></span><span style="display:flex;"><span>  }<span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">doSome</span>()
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>推荐写法:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span>,<span style="color:#a6e22e">itm</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">Users</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">item</span>.<span style="color:#a6e22e">Name</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;admin&#34;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">doSome</span>()
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>使用i,j之类的下标，本身就比较相似，一不小心就会造成了下标越界,推荐使用foreach</p>
+<p>反例:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span> ; <span style="color:#a6e22e">i</span>&lt; len(<span style="color:#a6e22e">users</span>); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span> ; <span style="color:#a6e22e">j</span> &lt; len(<span style="color:#a6e22e">users</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">children</span>); <span style="color:#a6e22e">j</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>     <span style="color:#75715e">// doSome
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>   }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>推荐写法</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>,<span style="color:#a6e22e">itm</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">users</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">item</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//dosome
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>假如非得使用下标操作，也要避免使用i,j之类的变量</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">uidx</span> <span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span> ; <span style="color:#a6e22e">uidx</span>&lt; len(<span style="color:#a6e22e">users</span>); <span style="color:#a6e22e">uidx</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>   <span style="color:#a6e22e">childen</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">users</span>[<span style="color:#a6e22e">uidx</span>].<span style="color:#a6e22e">children</span>  <span style="color:#75715e">//使用中间变量,避免臃肿
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>   <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">chidx</span><span style="color:#f92672">:=</span><span style="color:#ae81ff">0</span> ; <span style="color:#a6e22e">chidx</span> &lt; len(<span style="color:#a6e22e">childen</span>); <span style="color:#a6e22e">chidx</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>       <span style="color:#75715e">// chidx 和 uidx 能避免混淆，能在使用的过程中避免出错。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>   }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="5面条代码-过程式代码">5.面条代码, 过程式代码</h2>
+<p>面条代码过程式代码</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">UserInf</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">UserName</span>   <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">UserId</span>     <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Role</span>       <span style="color:#f92672">*</span><span style="color:#a6e22e">Role</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Alias</span>     <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Role</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Id</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Name</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">save</span>(<span style="color:#a6e22e">inf</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UserInf</span>){
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Role</span>(<span style="color:#a6e22e">inf</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">inf</span>.<span style="color:#a6e22e">Alias</span> = <span style="color:#a6e22e">genAlias</span>()
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">update</span>(<span style="color:#a6e22e">inf</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">update</span>(<span style="color:#a6e22e">inf</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UserInf</span>){
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">//update ....
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Role</span>(<span style="color:#a6e22e">inf</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UserInfo</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">queryUser</span>(<span style="color:#a6e22e">inf</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">inf</span>.<span style="color:#a6e22e">Role</span> = <span style="color:#a6e22e">queryRole</span>(<span style="color:#a6e22e">inf</span>.<span style="color:#a6e22e">UserId</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">queryUser</span>(<span style="color:#a6e22e">inf</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">UserInf</span>){
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">//select * from user where user_id = ?
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">inf</span>.<span style="color:#a6e22e">UserName</span> = <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">inf</span>.<span style="color:#a6e22e">xxx</span> = <span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>思考: 为什么要使用纯函数?</p>
+<h2 id="6-控制代码的长度">6. 控制代码的长度</h2>
+<p>人的左脑关心的是逻辑，右脑做的是快照(可能是伪科学)，实际情况中，假如我们一眼能看完，是不是剩下的就是在想逻辑，而不是一边读代码，一边想逻辑，这样能让我们大脑一次性把看到的代码缓存起来，然后专注于想逻辑。简短的代码，也可以避免bug，所以方法建议都控制在100行之内。</p>
+<h2 id="7-命名">7. 命名</h2>
+<p>这个放最后来写的原因是这个命名本来就很难，命名得好就会让代码清晰可读，命名不好，就会误导导致需要大量的注视来注释代码，本来维护代码已经是一件痛苦的事情了，假如在修改了代码后，注释没有同步修改，反而会引起误导。因为母语不是英文，很多同学跟我一样也都很痛苦，这里可以上网找找相关命名的资料，本人水平有限也只能是大概地举几个例子</p>
+<pre tabindex="0"><code>bool isStart // 服务启动的状态，最好使用正向的表达，是否启动，不推荐使用  bool isNotStop
+func ComputeUserScore() //计算用户积分，假如这是一个耗时的操作，推荐在方法名上就表示出来，不推荐使用GetUserScore,
+func DownloadFile() //下载文件，不推荐使用GetFile
+</code></pre>
+
+        
+
+        
+
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://youkele.github.io/posts/mysql-read-and-write-separation/" data-toggle="tooltip" data-placement="top" title="通过Connector/J实现数据库读写分离">&larr; Previous Post</a>
+            </li>
+          
+          
+            <li class="next">
+              <a href="https://youkele.github.io/posts/after-import-mq/" data-toggle="tooltip" data-placement="top" title="当引入MQ后...">Next Post &rarr;</a>
+            </li>
+          
+        </ul>
+      
+
+
+      
+
+    </div>
+  </div>
+</div>
+
+      
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2021
+          
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://youkele.github.io/">CURDer</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="https://gohugo.io">Hugo v0.99.1</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="https://youkele.github.io/js/main.js"></script><script> renderMathInElement(document.body); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="https://youkele.github.io/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+
+
+    
+  </body>
+</html>
+

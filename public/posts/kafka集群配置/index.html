@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>kafka集群配置 - CURDer</title>
+  <meta name="description" content="Kafka集群配置 kafka集群需要使用到zookeeper,需要在配置kafka之前配置zookeeper 本集群里使用的主机ip
+ 节点1: 10.20.250.80 节点2: 10.20.250.81 节点3: 10.20.250.83 相关路径
+ 主程序: /data/kafka kafka配置: /data/kafka/server.properties kafka数据: /data/kafka/kafkadata zookeeper配置: /data/kafka/zookeeper.properties zookeeper数据: /data/kafka/zkdata 首先下载kafka,部署中使用的版本为 kafka_2.11-0.10.2.1.tgz
+ cd /data/ tar -zxv -f kafka_2.11-0.10.2.1.tgz ln -s kafka_2.11-0.10.2.1.tgz kafka zookeeper 集群配置 每个节点对应开放的端口有 2181 ```` 2888  ``` 3888
+ 首先确认zookeeper的数据日志目录,比如本例中使用的 /data/kafka/zkdata   #在3个节点上分别执行,创建目录 mkdir -p /data/kafka/zkdata 生成myid   节点1~$ echo 1 &gt; /data/kafka/zkdata/myid #10.20.250.80 节点2~$ echo 2 &gt; /data/kafka/zkdata/myid #10.20.250.81 节点3~$ echo 3 &gt; /data/kafka/zkdata/myid #10."><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "CURDer",
+    
+    "url": "https:\/\/youkele.github.io\/"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "https:\/\/youkele.github.io\/"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "https:\/\/youkele.github.io\/",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "https:\/\/youkele.github.io\/posts\/kafka%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE\/",
+          "name": "Kafka集群配置"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : ""
+  },
+  "headline": "kafka集群配置",
+  "description" : "Kafka集群配置 kafka集群需要使用到zookeeper,需要在配置kafka之前配置zookeeper 本集群里使用的主机ip\n 节点1: 10.20.250.80 节点2: 10.20.250.81 节点3: 10.20.250.83 相关路径\n 主程序: \/data\/kafka kafka配置: \/data\/kafka\/server.properties kafka数据: \/data\/kafka\/kafkadata zookeeper配置: \/data\/kafka\/zookeeper.properties zookeeper数据: \/data\/kafka\/zkdata 首先下载kafka,部署中使用的版本为 kafka_2.11-0.10.2.1.tgz\n cd \/data\/ tar -zxv -f kafka_2.11-0.10.2.1.tgz ln -s kafka_2.11-0.10.2.1.tgz kafka zookeeper 集群配置 每个节点对应开放的端口有 2181 ```` 2888  ``` 3888\n 首先确认zookeeper的数据日志目录,比如本例中使用的 \/data\/kafka\/zkdata   #在3个节点上分别执行,创建目录 mkdir -p \/data\/kafka\/zkdata 生成myid   节点1~$ echo 1 \u0026gt; \/data\/kafka\/zkdata\/myid #10.20.250.80 节点2~$ echo 2 \u0026gt; \/data\/kafka\/zkdata\/myid #10.20.250.81 节点3~$ echo 3 \u0026gt; \/data\/kafka\/zkdata\/myid #10.",
+  "inLanguage" : "en",
+  "wordCount":  179 ,
+  "datePublished" : "2019-02-13T15:01:13",
+  "dateModified" : "2019-02-13T15:01:13",
+  "image" : "https:\/\/youkele.github.io\/",
+  "keywords" : [ "" ],
+  "mainEntityOfPage" : "https:\/\/youkele.github.io\/posts\/kafka%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "https:\/\/youkele.github.io\/",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "https:\/\/youkele.github.io\/",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
+
+<meta property="og:title" content="kafka集群配置" />
+<meta property="og:description" content="Kafka集群配置 kafka集群需要使用到zookeeper,需要在配置kafka之前配置zookeeper 本集群里使用的主机ip
+ 节点1: 10.20.250.80 节点2: 10.20.250.81 节点3: 10.20.250.83 相关路径
+ 主程序: /data/kafka kafka配置: /data/kafka/server.properties kafka数据: /data/kafka/kafkadata zookeeper配置: /data/kafka/zookeeper.properties zookeeper数据: /data/kafka/zkdata 首先下载kafka,部署中使用的版本为 kafka_2.11-0.10.2.1.tgz
+ cd /data/ tar -zxv -f kafka_2.11-0.10.2.1.tgz ln -s kafka_2.11-0.10.2.1.tgz kafka zookeeper 集群配置 每个节点对应开放的端口有 2181 ```` 2888  ``` 3888
+ 首先确认zookeeper的数据日志目录,比如本例中使用的 /data/kafka/zkdata   #在3个节点上分别执行,创建目录 mkdir -p /data/kafka/zkdata 生成myid   节点1~$ echo 1 &gt; /data/kafka/zkdata/myid #10.20.250.80 节点2~$ echo 2 &gt; /data/kafka/zkdata/myid #10.20.250.81 节点3~$ echo 3 &gt; /data/kafka/zkdata/myid #10.">
+<meta property="og:url" content="https://youkele.github.io/posts/kafka%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="CURDer" />
+
+  <meta name="twitter:title" content="kafka集群配置" />
+  <meta name="twitter:description" content="Kafka集群配置 kafka集群需要使用到zookeeper,需要在配置kafka之前配置zookeeper 本集群里使用的主机ip
+ 节点1: 10.20.250.80 节点2: 10.20.250.81 节点3: 10.20.250.83 相关路径
+ 主程序: /data/kafka kafka配置: /data/kafka/server.properties kafka数据: …">
+  <meta name="twitter:card" content="summary" />
+  <meta name="generator" content="Hugo 0.99.1" />
+  <link rel="alternate" href="https://youkele.github.io/index.xml" type="application/rss+xml" title="CURDer"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="https://youkele.github.io/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" /><link rel="stylesheet" href="https://youkele.github.io/css/syntax.css" /><link rel="stylesheet" href="https://youkele.github.io/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://youkele.github.io/">CURDer</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="posts-heading">
+              
+                <h1>kafka集群配置</h1>
+              
+              
+                <hr class="small">
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <h2 id="kafka集群配置">Kafka集群配置</h2>
+<h2 id="kafka集群需要使用到zookeeper需要在配置kafka之前配置zookeeper">kafka集群需要使用到zookeeper,需要在配置kafka之前配置zookeeper</h2>
+<p>本集群里使用的主机ip</p>
+<pre tabindex="0"><code>    节点1: 10.20.250.80
+    节点2: 10.20.250.81
+    节点3: 10.20.250.83
+</code></pre><p>相关路径</p>
+<pre tabindex="0"><code>    主程序:        /data/kafka
+    kafka配置:     /data/kafka/server.properties
+    kafka数据:     /data/kafka/kafkadata
+    zookeeper配置: /data/kafka/zookeeper.properties
+    zookeeper数据: /data/kafka/zkdata
+</code></pre><p>首先下载kafka,部署中使用的版本为 <code>kafka_2.11-0.10.2.1.tgz</code></p>
+<pre tabindex="0"><code>    cd /data/
+    tar -zxv -f  kafka_2.11-0.10.2.1.tgz
+    ln -s kafka_2.11-0.10.2.1.tgz kafka
+</code></pre><h2 id="zookeeper-集群配置">zookeeper 集群配置</h2>
+<p>每个节点对应开放的端口有 <code>2181 ````</code> 2888 <code> ``` 3888</code></p>
+<ol>
+<li>首先确认zookeeper的数据日志目录,比如本例中使用的 <code>/data/kafka/zkdata</code></li>
+</ol>
+<pre tabindex="0"><code>        #在3个节点上分别执行,创建目录
+        mkdir -p /data/kafka/zkdata
+</code></pre><ol start="2">
+<li>生成myid</li>
+</ol>
+<pre tabindex="0"><code>        节点1~$ echo 1 &gt; /data/kafka/zkdata/myid  #10.20.250.80
+        节点2~$ echo 2 &gt; /data/kafka/zkdata/myid  #10.20.250.81
+        节点3~$ echo 3 &gt; /data/kafka/zkdata/myid  #10.20.250.83
+</code></pre><ol start="3">
+<li>生成配置文件 <code>/data/kafka/zookeeper.properties</code></li>
+</ol>
+<pre tabindex="0"><code>        tickTime=2000
+        initLimit=5
+        syncLimit=2
+        dataDir=/data/kafka/zkdata
+        dataLogDir=/data/kafka/zkdata
+        clientPort=2181
+        server.1=10.20.250.80:2888:3888
+        server.2=10.20.250.81:2888:3888
+        server.3=10.20.250.83:2888:3888
+</code></pre><ol start="4">
+<li>启动服务</li>
+</ol>
+<pre tabindex="0"><code>        分别启动各个服务器
+        bin/zookeeper-server-start.sh -daemon zookeeper.properties
+        测试各个节点是否端口开放
+        测试是否有错误日志
+        
+</code></pre><p>配置kafka,监听端口为 <code>9092</code></p>
+<ol>
+<li>节点1配置 <code>/data/kafka/server.properties</code></li>
+</ol>
+<pre tabindex="0"><code>        broker.id=0 
+        advertised.listeners=PLAINTEXT://10.20.250.80:9092   #节点ip
+        num.network.threads=3
+        num.io.threads=8
+        socket.send.buffer.bytes=102400
+        socket.receive.buffer.bytes=102400
+        socket.request.max.bytes=104857600
+        log.dirs=/data/kafka/kafkadata    #kafka数据目录
+        num.partitions=1
+        num.recovery.threads.per.data.dir=1
+        offsets.topic.replication.factor=1
+        transaction.state.log.replication.factor=1
+        transaction.state.log.min.isr=1
+        log.retention.hours=720
+        log.segment.bytes=1073741824
+        log.retention.check.interval.ms=300000
+        zookeeper.connect=10.20.250.80:2181,10.20.250.81:2181,10.20.250.83:2181  #配置的zookeeper节点ip+主端口号,以逗号分隔
+        zookeeper.connection.timeout.ms=6000
+        group.initial.rebalance.delay.ms=0
+</code></pre><ol start="2">
+<li>节点2配置 <code>/data/kafka/server.properties</code></li>
+</ol>
+<pre tabindex="0"><code>        broker.id=1 
+        advertised.listeners=PLAINTEXT://10.20.250.81:9092   #节点ip
+        num.network.threads=3
+        num.io.threads=8
+        socket.send.buffer.bytes=102400
+        socket.receive.buffer.bytes=102400
+        socket.request.max.bytes=104857600
+        log.dirs=/data/kafka/kafkadata    #kafka数据目录
+        num.partitions=1
+        num.recovery.threads.per.data.dir=1
+        offsets.topic.replication.factor=1
+        transaction.state.log.replication.factor=1
+        transaction.state.log.min.isr=1
+        log.retention.hours=720
+        log.segment.bytes=1073741824
+        log.retention.check.interval.ms=300000
+        zookeeper.connect=10.20.250.80:2181,10.20.250.81:2181,10.20.250.83:2181  #配置的zookeeper节点ip+主端口号,以逗号分隔
+        zookeeper.connection.timeout.ms=6000
+        group.initial.rebalance.delay.ms=0
+</code></pre><ol start="3">
+<li>节点3配置 <code>/data/kafka/server.properties</code></li>
+</ol>
+<pre tabindex="0"><code>        broker.id=2 
+        advertised.listeners=PLAINTEXT://10.20.250.83:9092   #节点ip
+        num.network.threads=3
+        num.io.threads=8
+        socket.send.buffer.bytes=102400
+        socket.receive.buffer.bytes=102400
+        socket.request.max.bytes=104857600
+        log.dirs=/data/kafka/kafkadata    #kafka数据目录
+        num.partitions=1
+        num.recovery.threads.per.data.dir=1
+        offsets.topic.replication.factor=1
+        transaction.state.log.replication.factor=1
+        transaction.state.log.min.isr=1
+        log.retention.hours=720
+        log.segment.bytes=1073741824
+        log.retention.check.interval.ms=300000
+        zookeeper.connect=10.20.250.80:2181,10.20.250.81:2181,10.20.250.83:2181  #配置的zookeeper节点ip+主端口号,以逗号分隔
+        zookeeper.connection.timeout.ms=6000
+        group.initial.rebalance.delay.ms=0
+</code></pre><ol start="4">
+<li>启动服务器,分别在各个节点启动服务</li>
+</ol>
+<pre tabindex="0"><code>        bin/kafka-server-start.sh -daemon server.properties
+</code></pre><ol start="5">
+<li>测试</li>
+</ol>
+<pre tabindex="0"><code>    #测试端口是否正常开放,测试是否有异常输出
+    #创建主题
+    bin/kafka-topics.sh --create --zookeeper 10.20.250.80:2181,10.20.250.81:2181,10.20.250.83:2181  --replication-factor 1 --partitions 1 --topic test
+    #查看主题
+    bin/kafka-topics.sh --list --zookeeper 10.20.250.80:2181,10.20.250.81:2181,10.20.250.83:2181
+</code></pre>
+
+        
+
+        
+
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://youkele.github.io/posts/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" data-toggle="tooltip" data-placement="top" title="linux常用命令命令">&larr; Previous Post</a>
+            </li>
+          
+          
+            <li class="next">
+              <a href="https://youkele.github.io/posts/es%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE/" data-toggle="tooltip" data-placement="top" title="es集群配置">Next Post &rarr;</a>
+            </li>
+          
+        </ul>
+      
+
+
+      
+
+    </div>
+  </div>
+</div>
+
+      
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2021
+          
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://youkele.github.io/">CURDer</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="https://gohugo.io">Hugo v0.99.1</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="https://youkele.github.io/js/main.js"></script><script> renderMathInElement(document.body); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="https://youkele.github.io/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+
+
+    
+  </body>
+</html>
+
