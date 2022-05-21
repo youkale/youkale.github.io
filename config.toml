@@ -2,29 +2,59 @@ baseurl = "https://youkale.github.io"
 title = "(-> c r u d)"
 theme = "hugo-coder"
 languagecode = "zh"
+defaultContentLanguage = "zh"
 
 [params]
   author = "Youkale"
   info = "摸鱼未遂"
-  description = "一个摸鱼的CRUDer仔"
-  keywords = "blog,developer,personal"
+  description = "摸鱼,clojure,java,golang,kafka,redis,rest,集成,pipeline,rule engine"
+  keywords = "rest,kafka,房东网络,clojure,golang,redis,程序员,developer,数据集成,pipeline,rule engine"
   #gravatar = "john.doe@example.com"
-
+  avatarURL = "images/avatar.jpg"
 
   enableTwemoji = true
+  enableRobotsTXT = true
 
   colorScheme = "auto"
   hidecolorschemetoggle = false
 
+  dateFormat = "2006-01-02"
+
+
+  googleAnalytics = 'UA-207762285-1'
 
   pygmentsstyle = "bw"
   pygmentscodefences = true
   pygmentscodefencesguesssyntax = true
 
+
+[params.csp]
+childsrc = ["'self'"]
+fontsrc = ["'self'", "https://fonts.gstatic.com", "https://cdn.jsdelivr.net/"]
+formaction = ["'self'"]
+framesrc = ["'self'"]
+imgsrc = ["'self'"]
+objectsrc = ["'none'"]
+stylesrc = [
+  "'self'",
+  "'unsafe-inline'",
+  "https://fonts.googleapis.com/",
+  "https://cdn.jsdelivr.net/"
+]
+scriptsrc = [
+  "'self'",
+  "'unsafe-inline'",
+  "https://www.google-analytics.com",
+  "https://cdn.jsdelivr.net/"
+]
+prefetchsrc = ["'self'"]
+# connect-src directive – defines valid targets for to XMLHttpRequest (AJAX), WebSockets or EventSource
+connectsrc = ["'self'", "https://www.google-analytics.com"]
+
 [taxonomies]
   category = "categories"
   series = "series"
-  tag = "tag"
+  tag = "tags"
   author = "authors"
 
 # Social links
@@ -33,17 +63,6 @@ languagecode = "zh"
   icon = "fa fa-github fa-2x"
   weight = 1
   url = "https://github.com/youkale/"
-[[params.social]]
-  name = "Gitlab"
-  icon = "fa fa-gitlab fa-2x"
-  weight = 2
-  url = "https://gitlab.com/johndoe/"
-[[params.social]]
-  name = "Twitter"
-  icon = "fa fa-twitter fa-2x"
-  weight = 3
-  url = "https://twitter.com/johndoe/"
-
 
 [[menu.main]]
   name = "文章"
