@@ -65,10 +65,14 @@ connectsrc = ["'self'", "https://www.google-analytics.com"]
   url = "https://github.com/youkale/"
 
 [[menu.main]]
-  name = "文章"
+  name = "Blog"
   weight = 1
   url  = "posts/"
 [[menu.main]]
-  name = "关于"
+  name = "收藏"
   weight = 2
+  url  = "bookmark/"
+[[menu.main]]
+  name = "关于"
+  weight = 3
   url = "about/"
