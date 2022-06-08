@@ -8,7 +8,7 @@ defaultContentLanguage = "zh"
   author = "Youkale"
   info = "摸鱼未遂"
   description = "摸鱼,clojure,java,golang,kafka,redis,rest,集成,pipeline,rule engine"
-  keywords = "rest,kafka,房东网络,clojure,golang,redis,程序员,developer,数据集成,pipeline,rule engine"
+  keywords = "rest,kafka,clojure,golang,redis,程序员,developer,数据集成,pipeline,rule engine"
   #gravatar = "john.doe@example.com"
   avatarURL = "images/avatar.jpg"
 
