@@ -21,7 +21,7 @@ defaultContentLanguage = "zh"
   dateFormat = "2006-01-02"
 
 
-  googleAnalytics = 'UA-207762285-1'
+  googleAnalytics = 'G-H9CHLFCJFP'
 
   pygmentsstyle = "bw"
   pygmentscodefences = true
