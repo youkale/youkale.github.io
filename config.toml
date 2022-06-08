@@ -28,6 +28,15 @@ defaultContentLanguage = "zh"
   pygmentscodefencesguesssyntax = true
 
 
+[params.utteranc]
+  enable = true
+  repo = "youkale/youkale.github.io"
+  issueTerm = "title"
+  theme = "github-light"
+  label = "评论"
+  crossorigin = "anonymous"
+  async = true
+
 [params.csp]
 childsrc = ["'self'"]
 fontsrc = ["'self'", "https://fonts.gstatic.com", "https://cdn.jsdelivr.net/"]
