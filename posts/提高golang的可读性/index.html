@@ -2,7 +2,7 @@
 //UserCtrl func UserInfo(userId string){ user.UserInfo(userId) .... .... //resp result ... } //UserService func UserInfo(userId string){ if len(userId) > 0 { //do query database ..... } } // repo func queryUserInfo(userId string){ if len(userId) > 0{ //select * from user where user_id = ? } } 从这个例子来看，在service层和数据库查询，我们都进行了userId的判断. 因为当我们经常会忘记，我们是否在上一层入参的时候进行了userId为空的判断. 为了避免空指针，我们不得已一层层进行判断.
 假如我们尽早地返回，那么就可以避免后续的层层判空
 推荐写法:
-//userCtrl func UserInfo(userId string){ if len(userId) == 0 { //resp some error } user.UserInfo(userId) } 2. 写好分支语句 反例:"><meta name=keywords content="rest,kafka,房东网络,clojure,golang,redis,程序员,developer,数据集成,pipeline,rule engine"><meta name=twitter:card content="summary"><meta name=twitter:title content="如何提高golang的可读性"><meta name=twitter:description content="1. 尽早返回 反例:
+//userCtrl func UserInfo(userId string){ if len(userId) == 0 { //resp some error } user.UserInfo(userId) } 2. 写好分支语句 反例:"><meta name=keywords content="rest,kafka,clojure,golang,redis,程序员,developer,数据集成,pipeline,rule engine"><meta name=twitter:card content="summary"><meta name=twitter:title content="如何提高golang的可读性"><meta name=twitter:description content="1. 尽早返回 反例:
 //UserCtrl func UserInfo(userId string){ user.UserInfo(userId) .... .... //resp result ... } //UserService func UserInfo(userId string){ if len(userId) > 0 { //do query database ..... } } // repo func queryUserInfo(userId string){ if len(userId) > 0{ //select * from user where user_id = ? } } 从这个例子来看，在service层和数据库查询，我们都进行了userId的判断. 因为当我们经常会忘记，我们是否在上一层入参的时候进行了userId为空的判断. 为了避免空指针，我们不得已一层层进行判断.
 假如我们尽早地返回，那么就可以避免后续的层层判空
 推荐写法:

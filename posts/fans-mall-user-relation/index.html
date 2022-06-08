@@ -11,7 +11,7 @@
 通过经验值计算高峰时期= 平时峰值 * 4，来计算新增与查询用户性能指标:
 新增用户(TPS) * 4 = 60 ， 采用异步形式MQ(Kafka,rabbitMQ)/Redis(pub/sub,lpush/rpop)/JVM+Mysql进行处理。 查询用户(QPS) * 4 = 2000，qps不高，可以通过通过水平部署2台避免单点。 技术实现考量 异步
 Kafka集群，支持高可用: 生产者：可用通过ack参数来确定消息推送集群各个broker中的副本。每个topic可以配置副本数量。 消费者：可以通过扩展分区进行多消费者进行消费，并且可以在在业务完成后提交事物。同样的消息即使消费后，也可以通过修改group-id进行重复消费。 Redis哨兵，支持高可用 JVM队列，不支持高可用 保障100%不丢消息：
-定时轮询：数据写入MQ后同时写入Mysql，并加入状态字段。 消费确认：数据消费后，提交事物，同时更新数据库中的状态。 "><meta name=keywords content="rest,kafka,房东网络,clojure,golang,redis,程序员,developer,数据集成,pipeline,rule engine"><meta name=twitter:card content="summary"><meta name=twitter:title content="微商锁粉重构思路"><meta name=twitter:description content=" 项目背景 ​	通过分享链接到朋友圈、微信群进行锁粉，当被锁粉对象消费后，会通过比例返佣给分享链接的用户。
+定时轮询：数据写入MQ后同时写入Mysql，并加入状态字段。 消费确认：数据消费后，提交事物，同时更新数据库中的状态。 "><meta name=keywords content="rest,kafka,clojure,golang,redis,程序员,developer,数据集成,pipeline,rule engine"><meta name=twitter:card content="summary"><meta name=twitter:title content="微商锁粉重构思路"><meta name=twitter:description content=" 项目背景 ​	通过分享链接到朋友圈、微信群进行锁粉，当被锁粉对象消费后，会通过比例返佣给分享链接的用户。
 问题描述 ​	点击链接进入的用户，因为业务处理过长，出现响应超时情况，导致系统吞吐量过低、甚至出现点击链接后用户锁粉失败的情况。
 业务分析 调用步骤:
 需要获取微信用户信息。 计算上级用户的粉丝数量。 同时统计当天新增用户。 微信头像会过期，需要将图片同步到对象存储。 &mldr;. 非业务分析 高性能 ​	按照目前用户新增的速度来看，每秒TPS大约在15。

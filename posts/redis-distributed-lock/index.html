@@ -10,7 +10,7 @@ zk
 避免死锁: 多个线程访问不会出现死锁的情况
 锁释放: 进程故障能自动释放锁，只有持有锁的进程能释放锁
 尝试自己实现一个 实现 copy from importnew Redis 分布式锁的正确实现方式（ Java 版 ）
-public class RedisTool { private static final String LOCK_SUCCESS = &#34;OK&#34;; private static final String SET_IF_NOT_EXIST = &#34;NX&#34;; private static final String SET_WITH_EXPIRE_TIME = &#34;PX&#34;; public static boolean tryGetDistributedLock(Jedis jedis, String lockKey, String requestId, int expireTime) { String result = jedis."><meta name=keywords content="rest,kafka,房东网络,clojure,golang,redis,程序员,developer,数据集成,pipeline,rule engine"><meta name=twitter:card content="summary"><meta name=twitter:title content="重谈redis分布式锁"><meta name=twitter:description content="前言 Redis分布式锁其实网上已经一大把了，我写这篇博客的目的是想发表下自己的浅见。
+public class RedisTool { private static final String LOCK_SUCCESS = &#34;OK&#34;; private static final String SET_IF_NOT_EXIST = &#34;NX&#34;; private static final String SET_WITH_EXPIRE_TIME = &#34;PX&#34;; public static boolean tryGetDistributedLock(Jedis jedis, String lockKey, String requestId, int expireTime) { String result = jedis."><meta name=keywords content="rest,kafka,clojure,golang,redis,程序员,developer,数据集成,pipeline,rule engine"><meta name=twitter:card content="summary"><meta name=twitter:title content="重谈redis分布式锁"><meta name=twitter:description content="前言 Redis分布式锁其实网上已经一大把了，我写这篇博客的目的是想发表下自己的浅见。
 我们知道在单进程中，通过语言内置的锁可以保证数据的一致性，随着软件的不断扩大，很多应用已经是多进程的方式部署,那么为了保证数据的一致性,我们需要一个分布式锁。标题说的是Redis分布式锁，那么我下面主要讲的rendis锁，而且不会涉及到redis单点故障的问题。
 常见的分布锁 搜索一下常见的分布式锁说的都是通过redis和zookeeper来实现。
 redis

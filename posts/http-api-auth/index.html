@@ -21,7 +21,7 @@ Header:
 然后连同参数（URL，表单信息，sessionid等）信息一同传递给接收端，接收端根据相同的规则对数据进行验证。
 展开思路 因为每个请求都有唯一的checksum,那么我们可以在这个基础上加上鉴权功能，如某个Appid只能访问某个path
 总结 上面方法中能保证的安全有两部分： 1,数据防篡改 2,重放攻击 要需要防止数据窃取，还是需要将https加入进来。 关于非法数据引起的一些问题，想必开发们也都碰到过，如果是防止sql注入最好在前端做一次参数检查，后端参数检查，用sql参数化的方式。xss攻击也是需要在各个点进行参数检查。
-总的来说知道各种安全问题，才能写出健壮的程序来。"><meta name=keywords content="rest,kafka,房东网络,clojure,golang,redis,程序员,developer,数据集成,pipeline,rule engine"><meta name=twitter:card content="summary"><meta name=twitter:title content="浅谈Http API验证"><meta name=twitter:description content="前言 目前web应用主要面临的安全问题：
+总的来说知道各种安全问题，才能写出健壮的程序来。"><meta name=keywords content="rest,kafka,clojure,golang,redis,程序员,developer,数据集成,pipeline,rule engine"><meta name=twitter:card content="summary"><meta name=twitter:title content="浅谈Http API验证"><meta name=twitter:description content="前言 目前web应用主要面临的安全问题：
 数据篡改
 数据窃取
 重放攻击
