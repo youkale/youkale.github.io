@@ -1,0 +1,122 @@
+<!doctype html><html lang=zh><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta http-equiv=content-security-policy content="upgrade-insecure-requests; block-all-mixed-content; default-src 'self'; child-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/; form-action 'self'; frame-src 'self'; img-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://cdn.jsdelivr.net/; prefetch-src 'self'; connect-src 'self' https://www.google-analytics.com;"><meta name=author content="Youkale"><meta name=description content="前言 Redis分布式锁其实网上已经一大把了，我写这篇博客的目的是想发表下自己的浅见。
+我们知道在单进程中，通过语言内置的锁可以保证数据的一致性，随着软件的不断扩大，很多应用已经是多进程的方式部署,那么为了保证数据的一致性,我们需要一个分布式锁。标题说的是Redis分布式锁，那么我下面主要讲的rendis锁，而且不会涉及到redis单点故障的问题。
+常见的分布锁 搜索一下常见的分布式锁说的都是通过redis和zookeeper来实现。
+redis
+setnx 通过设置一个共有的key，而且通过设置过期时间来避免死锁
+zk
+通过设置一个共有的节点,通过zk的watch,观察节点的变化进行通知
+锁的需求 独占: 一个时间点只能一个线程访问
+可重入: 同一个线程只要当前持有锁，可以重复进入
+避免死锁: 多个线程访问不会出现死锁的情况
+锁释放: 进程故障能自动释放锁，只有持有锁的进程能释放锁
+尝试自己实现一个 实现 copy from importnew Redis 分布式锁的正确实现方式（ Java 版 ）
+public class RedisTool { private static final String LOCK_SUCCESS = &#34;OK&#34;; private static final String SET_IF_NOT_EXIST = &#34;NX&#34;; private static final String SET_WITH_EXPIRE_TIME = &#34;PX&#34;; public static boolean tryGetDistributedLock(Jedis jedis, String lockKey, String requestId, int expireTime) { String result = jedis."><meta name=keywords content="rest,kafka,房东网络,clojure,golang,redis,程序员,developer,数据集成,pipeline,rule engine"><meta name=twitter:card content="summary"><meta name=twitter:title content="重谈redis分布式锁"><meta name=twitter:description content="前言 Redis分布式锁其实网上已经一大把了，我写这篇博客的目的是想发表下自己的浅见。
+我们知道在单进程中，通过语言内置的锁可以保证数据的一致性，随着软件的不断扩大，很多应用已经是多进程的方式部署,那么为了保证数据的一致性,我们需要一个分布式锁。标题说的是Redis分布式锁，那么我下面主要讲的rendis锁，而且不会涉及到redis单点故障的问题。
+常见的分布锁 搜索一下常见的分布式锁说的都是通过redis和zookeeper来实现。
+redis
+setnx 通过设置一个共有的key，而且通过设置过期时间来避免死锁
+zk
+通过设置一个共有的节点,通过zk的watch,观察节点的变化进行通知
+锁的需求 独占: 一个时间点只能一个线程访问
+可重入: 同一个线程只要当前持有锁，可以重复进入
+避免死锁: 多个线程访问不会出现死锁的情况
+锁释放: 进程故障能自动释放锁，只有持有锁的进程能释放锁
+尝试自己实现一个 实现 copy from importnew Redis 分布式锁的正确实现方式（ Java 版 ）
+public class RedisTool { private static final String LOCK_SUCCESS = &#34;OK&#34;; private static final String SET_IF_NOT_EXIST = &#34;NX&#34;; private static final String SET_WITH_EXPIRE_TIME = &#34;PX&#34;; public static boolean tryGetDistributedLock(Jedis jedis, String lockKey, String requestId, int expireTime) { String result = jedis."><meta property="og:title" content="重谈redis分布式锁"><meta property="og:description" content="前言 Redis分布式锁其实网上已经一大把了，我写这篇博客的目的是想发表下自己的浅见。
+我们知道在单进程中，通过语言内置的锁可以保证数据的一致性，随着软件的不断扩大，很多应用已经是多进程的方式部署,那么为了保证数据的一致性,我们需要一个分布式锁。标题说的是Redis分布式锁，那么我下面主要讲的rendis锁，而且不会涉及到redis单点故障的问题。
+常见的分布锁 搜索一下常见的分布式锁说的都是通过redis和zookeeper来实现。
+redis
+setnx 通过设置一个共有的key，而且通过设置过期时间来避免死锁
+zk
+通过设置一个共有的节点,通过zk的watch,观察节点的变化进行通知
+锁的需求 独占: 一个时间点只能一个线程访问
+可重入: 同一个线程只要当前持有锁，可以重复进入
+避免死锁: 多个线程访问不会出现死锁的情况
+锁释放: 进程故障能自动释放锁，只有持有锁的进程能释放锁
+尝试自己实现一个 实现 copy from importnew Redis 分布式锁的正确实现方式（ Java 版 ）
+public class RedisTool { private static final String LOCK_SUCCESS = &#34;OK&#34;; private static final String SET_IF_NOT_EXIST = &#34;NX&#34;; private static final String SET_WITH_EXPIRE_TIME = &#34;PX&#34;; public static boolean tryGetDistributedLock(Jedis jedis, String lockKey, String requestId, int expireTime) { String result = jedis."><meta property="og:type" content="article"><meta property="og:url" content="https://youkale.github.io/posts/redis-distributed-lock/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2018-08-12T16:58:39+00:00"><meta property="article:modified_time" content="2018-08-12T16:58:39+00:00"><title>(-> c r u d)</title><link rel=canonical href=https://youkale.github.io/posts/redis-distributed-lock/><link rel=preload href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.6b1a4fbc48955b72aea7913e43fabeb45e8bc120da5aa41b598dd33adcac4b59.css integrity="sha256-axpPvEiVW3Kup5E+Q/q+tF6LwSDaWqQbWY3TOtysS1k=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.39e41a7f16bdf8cb16e43cae7d714fa1016f1d2d2898a5b3f27f42c9979204e2.css integrity="sha256-OeQafxa9+MsW5DyufXFPoQFvHS0omKWz8n9CyZeSBOI=" crossorigin=anonymous media=screen><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5><meta name=generator content="Hugo 0.100.1"></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=/>(-> c r u d)</a>
+<input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/posts/>文章</a></li><li class=navigation-item><a class=navigation-link href=/about/>关于</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://youkale.github.io/posts/redis-distributed-lock/>重谈redis分布式锁</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa fa-calendar" aria-hidden=true></i>
+<time datetime=2018-08-12T16:58:39Z>2018-08-12</time></span>
+<span class=reading-time><i class="fa fa-clock-o" aria-hidden=true></i></span></div></div></header><div><h3 id=前言>前言
+<a class=heading-link href=#%e5%89%8d%e8%a8%80><i class="fa fa-link" aria-hidden=true></i></a></h3><p>Redis分布式锁其实网上已经一大把了，我写这篇博客的目的是想发表下自己的浅见。</p><p>我们知道在单进程中，通过语言内置的锁可以保证数据的一致性，随着软件的不断扩大，很多应用已经是多进程的方式部署,那么为了保证数据的一致性,我们需要一个分布式锁。标题说的是Redis分布式锁，那么我下面主要讲的rendis锁，而且不会涉及到redis单点故障的问题。</p><h3 id=常见的分布锁>常见的分布锁
+<a class=heading-link href=#%e5%b8%b8%e8%a7%81%e7%9a%84%e5%88%86%e5%b8%83%e9%94%81><i class="fa fa-link" aria-hidden=true></i></a></h3><p>搜索一下常见的分布式锁说的都是通过redis和zookeeper来实现。</p><ul><li><p>redis</p><blockquote><p>setnx 通过设置一个共有的key，而且通过设置过期时间来避免死锁</p></blockquote></li><li><p>zk</p><blockquote><p>通过设置一个共有的节点,通过zk的watch,观察节点的变化进行通知</p></blockquote></li></ul><h3 id=锁的需求>锁的需求
+<a class=heading-link href=#%e9%94%81%e7%9a%84%e9%9c%80%e6%b1%82><i class="fa fa-link" aria-hidden=true></i></a></h3><ul><li><p>独占: 一个时间点只能一个线程访问</p></li><li><p>可重入: 同一个线程只要当前持有锁，可以重复进入</p></li><li><p>避免死锁: 多个线程访问不会出现死锁的情况</p></li><li><p>锁释放: 进程故障能自动释放锁，只有持有锁的进程能释放锁</p></li></ul><h3 id=尝试自己实现一个>尝试自己实现一个
+<a class=heading-link href=#%e5%b0%9d%e8%af%95%e8%87%aa%e5%b7%b1%e5%ae%9e%e7%8e%b0%e4%b8%80%e4%b8%aa><i class="fa fa-link" aria-hidden=true></i></a></h3><blockquote><p>实现 copy from importnew <a href=http://www.importnew.com/27477.html>Redis 分布式锁的正确实现方式（ Java 版 ）</a></p></blockquote><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>public class RedisTool <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>    private static final String LOCK_SUCCESS <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;OK&#34;</span>;
+</span></span><span style=display:flex><span>    private static final String SET_IF_NOT_EXIST <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;NX&#34;</span>;
+</span></span><span style=display:flex><span>    private static final String SET_WITH_EXPIRE_TIME <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;PX&#34;</span>;
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>    public static boolean tryGetDistributedLock<span style=color:#f92672>(</span>Jedis jedis, String lockKey, String requestId, int expireTime<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>        String result <span style=color:#f92672>=</span> jedis.set<span style=color:#f92672>(</span>lockKey, requestId, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime<span style=color:#f92672>)</span>;
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> <span style=color:#f92672>(</span>LOCK_SUCCESS.equals<span style=color:#f92672>(</span>result<span style=color:#f92672>))</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>return</span> true;
+</span></span><span style=display:flex><span>        <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> false;
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    private static final Long RELEASE_SUCCESS <span style=color:#f92672>=</span> 1L;
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>    public static boolean releaseDistributedLock<span style=color:#f92672>(</span>Jedis jedis, String lockKey, String requestId<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>        String script <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;if redis.call(&#39;get&#39;, KEYS[1]) == ARGV[1] then return redis.call(&#39;del&#39;, KEYS[1]) else return 0 end&#34;</span>;
+</span></span><span style=display:flex><span>        Object result <span style=color:#f92672>=</span> jedis.eval<span style=color:#f92672>(</span>script, Collections.singletonList<span style=color:#f92672>(</span>lockKey<span style=color:#f92672>)</span>, Collections.singletonList<span style=color:#f92672>(</span>requestId<span style=color:#f92672>))</span>;
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> <span style=color:#f92672>(</span>RELEASE_SUCCESS.equals<span style=color:#f92672>(</span>result<span style=color:#f92672>))</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#66d9ef>return</span> true;
+</span></span><span style=display:flex><span>        <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> false;
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><hr><blockquote><p>上面的锁实现存在一个问题,假如程序员A不小心调用了releaseDistributedLock就会把某个已经持有锁的线程的锁释放掉。相信大家都能想到用ThreadLocal方式避免给未持有锁的线程释放了。 那我就试着将这代码改改。(伪代码)</p></blockquote><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>public class RedisToolv2 <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   private static final String LOCK_SUCCESS <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;OK&#34;</span>;
+</span></span><span style=display:flex><span>   private static final String SET_IF_NOT_EXIST <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;NX&#34;</span>;
+</span></span><span style=display:flex><span>   private static final String SET_WITH_EXPIRE_TIME <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;PX&#34;</span>;
+</span></span><span style=display:flex><span>   private final ThreadLocal&lt;Boolean&gt; hasLock <span style=color:#f92672>=</span> new ThreadLocal&lt;&gt;<span style=color:#f92672>()</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   public static boolean tryGetDistributedLock<span style=color:#f92672>(</span>Jedis jedis, String lockKey, String requestId, int expireTime<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>       String result <span style=color:#f92672>=</span> jedis.set<span style=color:#f92672>(</span>lockKey, requestId, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime<span style=color:#f92672>)</span>;
+</span></span><span style=display:flex><span>       
+</span></span><span style=display:flex><span>       boolean locked <span style=color:#f92672>=</span> false;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>       <span style=color:#66d9ef>if</span> <span style=color:#f92672>(</span>LOCK_SUCCESS.equals<span style=color:#f92672>(</span>result<span style=color:#f92672>))</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>           locked <span style=color:#f92672>=</span> true;
+</span></span><span style=display:flex><span>       <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>       hasLock.set<span style=color:#f92672>(</span>locked<span style=color:#f92672>)</span>;
+</span></span><span style=display:flex><span>       <span style=color:#66d9ef>return</span> locked;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   private static final Long RELEASE_SUCCESS <span style=color:#f92672>=</span> 1L;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>   public static boolean releaseDistributedLock<span style=color:#f92672>(</span>Jedis jedis, String lockKey, String requestId<span style=color:#f92672>)</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>       boolean locked <span style=color:#f92672>=</span> Optional.ofNull<span style=color:#f92672>(</span>hasLock.get<span style=color:#f92672>())</span>.orElse<span style=color:#f92672>(</span>false<span style=color:#f92672>)</span> ;
+</span></span><span style=display:flex><span>       boolean unloked <span style=color:#f92672>=</span> false;
+</span></span><span style=display:flex><span>       <span style=color:#66d9ef>if</span><span style=color:#f92672>(</span>locked<span style=color:#f92672>){</span>
+</span></span><span style=display:flex><span>           String script <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;if redis.call(&#39;get&#39;, KEYS[1]) == ARGV[1] then return redis.call(&#39;del&#39;, KEYS[1]) else return 0 end&#34;</span>;
+</span></span><span style=display:flex><span>           Object result <span style=color:#f92672>=</span> jedis.eval<span style=color:#f92672>(</span>script, Collections.singletonList<span style=color:#f92672>(</span>lockKey<span style=color:#f92672>)</span>, Collections.singletonList<span style=color:#f92672>(</span>requestId<span style=color:#f92672>))</span>;
+</span></span><span style=display:flex><span>           <span style=color:#66d9ef>if</span> <span style=color:#f92672>(</span>RELEASE_SUCCESS.equals<span style=color:#f92672>(</span>result<span style=color:#f92672>))</span> <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>               unloked <span style=color:#f92672>=</span> true;
+</span></span><span style=display:flex><span>           <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>       <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>       <span style=color:#66d9ef>return</span> false;
+</span></span><span style=display:flex><span>   <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><hr><p>上面的方式虽然说解决了其他线程误删锁的情况，但是分布式锁其实还有很多细节都地方需要实现，当一个线程已经拥有此锁了，如果还有大量其他(本应用或其他应用)的线程在请求锁，无疑给redis造成很大的压力(当然这个得看应用的规模，小规模是不会出现这个情况)。</p><blockquote><p>假设我们同一个应用中同一个时间点只有线程在请求分布式锁，那么相对于Redis的压力是不是就会下降很多? 那么我们在代码中加入一个同步锁是不是就解决了问题呢？首先我想到的是synchronized可以重入，可以使用递归的方式调用。但是如果是递归，如果长时间拿不到锁，那么有可能会引发StackOverflowError。额， 那这不能实现，没招了咩？ 其实jdk里面带了一个 ReentrantLock,这个锁其实跟synchronized差不多，也是可以重入的，而且有一个 tryLock(long timeout, TimeUnit unit)的方法，在递归调用的时候可以避免Stack过大。 （思路有了，我相信代码也是很轻易就写出来了）</p></blockquote><h3 id=抛个砖>抛个砖
+<a class=heading-link href=#%e6%8a%9b%e4%b8%aa%e7%a0%96><i class="fa fa-link" aria-hidden=true></i></a></h3><ul><li><p>那么这个锁持有的时间该如何计算呢？</p></li><li><p>还有就是这么实现这个锁是不是就完美了呢？？</p></li><li><p>Redis有个叫<a href=http://redisdoc.com/topic/notification.html>键空间通知(keyspace notification)</a> 的功能，是不是可以用这种方式来实现一个类似zookeeper的锁呢 ？</p></li></ul><h3 id=最后>最后
+<a class=heading-link href=#%e6%9c%80%e5%90%8e><i class="fa fa-link" aria-hidden=true></i></a></h3><p>各位看官还有什么好的思路欢迎来交流呀。</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©
+2022
+Youkale
+·
+<a href=https://gohugo.io/>Hugo</a> & <a href=https://github.com/luizdepra/hugo-coder/>Coder</a>.</section></footer></main><script src=/js/coder.min.f411a1043e37c7c14dfb03f4d94d60d9ee69cfa413b16d0fd4f28695babb82bb.js integrity="sha256-9BGhBD43x8FN+wP02U1g2e5pz6QTsW0P1PKGlbq7grs="></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-H9CHLFCJFP"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-H9CHLFCJFP')</script></body></html>

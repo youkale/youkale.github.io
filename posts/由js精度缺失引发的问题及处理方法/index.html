@@ -1,0 +1,134 @@
+<!doctype html><html lang=zh><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta http-equiv=content-security-policy content="upgrade-insecure-requests; block-all-mixed-content; default-src 'self'; child-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/; form-action 'self'; frame-src 'self'; img-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://cdn.jsdelivr.net/; prefetch-src 'self'; connect-src 'self' https://www.google-analytics.com;"><meta name=author content="Youkale"><meta name=description content="问题场景 在使用java的Long类型过程中,当这个Long类型数值超过 1^0+1^1+1^2+...1^58的范围后就会引发精度丢失, 详见JS[IEEE754规范](https://en.wikipedia.org/wiki/IEEE_754) 常见的现象就是比如:1000967854800048128,通过js转换成Number类型成为了:1000967854800048100, 由此会引发一系列问题,比如当年著名的爱国者导弹. 因为精度缺失造成问题,大多数情况发生在前后端交互过程中,那么下面就分别说说处理方法 普通场景的处理方法 简单的处理方法，jackson,gson等json工具包已经包含了Long类型处理方法了,基本上都是转String.
+gson处理方法 GsonBuilder builder = new GsonBuilder(); //默认将所有的Long转换成String builder.setLongSerializationPolicy(LongSerializationPolicy.STRING); jackson处理方法 ObjectMapper objectMapper = new ObjectMapper(); SimpleModule module = new SimpleModule(); module.addSerializer(Long.class, ToStringSerializer.instance); module.addSerializer(Long.TYPE, ToStringSerializer.instance); 高级场景处理 为了避免将其他无需转换成String的Long类型转换,这里提供一个高级的用法， 思路很简单就是定义一个Id类型,通过实现Id类型的序列化和反序列化功能即可进行实现. 下面就用Gson和jackson来演示
+核心代码 //Gson GsonBuilder builder = new GsonBuilder(); builder.registerTypeAdapter(Id.class, (JsonSerializer<Id>) (src, typeOfSrc, context) -> new JsonPrimitive(src.getVal())); builder.registerTypeAdapter(Id.class, (JsonDeserializer<Id>) (json, typeOfT, context) -> new Id(json.getAsLong())); Gson gson = builder.create(); User user = new User(); user.setUserId(new Id(11111L)); user."><meta name=keywords content="rest,kafka,房东网络,clojure,golang,redis,程序员,developer,数据集成,pipeline,rule engine"><meta name=twitter:card content="summary"><meta name=twitter:title content="由js精度缺失引发的问题及处理方法"><meta name=twitter:description content="问题场景 在使用java的Long类型过程中,当这个Long类型数值超过 1^0+1^1+1^2+...1^58的范围后就会引发精度丢失, 详见JS[IEEE754规范](https://en.wikipedia.org/wiki/IEEE_754) 常见的现象就是比如:1000967854800048128,通过js转换成Number类型成为了:1000967854800048100, 由此会引发一系列问题,比如当年著名的爱国者导弹. 因为精度缺失造成问题,大多数情况发生在前后端交互过程中,那么下面就分别说说处理方法 普通场景的处理方法 简单的处理方法，jackson,gson等json工具包已经包含了Long类型处理方法了,基本上都是转String.
+gson处理方法 GsonBuilder builder = new GsonBuilder(); //默认将所有的Long转换成String builder.setLongSerializationPolicy(LongSerializationPolicy.STRING); jackson处理方法 ObjectMapper objectMapper = new ObjectMapper(); SimpleModule module = new SimpleModule(); module.addSerializer(Long.class, ToStringSerializer.instance); module.addSerializer(Long.TYPE, ToStringSerializer.instance); 高级场景处理 为了避免将其他无需转换成String的Long类型转换,这里提供一个高级的用法， 思路很简单就是定义一个Id类型,通过实现Id类型的序列化和反序列化功能即可进行实现. 下面就用Gson和jackson来演示
+核心代码 //Gson GsonBuilder builder = new GsonBuilder(); builder.registerTypeAdapter(Id.class, (JsonSerializer<Id>) (src, typeOfSrc, context) -> new JsonPrimitive(src.getVal())); builder.registerTypeAdapter(Id.class, (JsonDeserializer<Id>) (json, typeOfT, context) -> new Id(json.getAsLong())); Gson gson = builder.create(); User user = new User(); user.setUserId(new Id(11111L)); user."><meta property="og:title" content="由js精度缺失引发的问题及处理方法"><meta property="og:description" content="问题场景 在使用java的Long类型过程中,当这个Long类型数值超过 1^0+1^1+1^2+...1^58的范围后就会引发精度丢失, 详见JS[IEEE754规范](https://en.wikipedia.org/wiki/IEEE_754) 常见的现象就是比如:1000967854800048128,通过js转换成Number类型成为了:1000967854800048100, 由此会引发一系列问题,比如当年著名的爱国者导弹. 因为精度缺失造成问题,大多数情况发生在前后端交互过程中,那么下面就分别说说处理方法 普通场景的处理方法 简单的处理方法，jackson,gson等json工具包已经包含了Long类型处理方法了,基本上都是转String.
+gson处理方法 GsonBuilder builder = new GsonBuilder(); //默认将所有的Long转换成String builder.setLongSerializationPolicy(LongSerializationPolicy.STRING); jackson处理方法 ObjectMapper objectMapper = new ObjectMapper(); SimpleModule module = new SimpleModule(); module.addSerializer(Long.class, ToStringSerializer.instance); module.addSerializer(Long.TYPE, ToStringSerializer.instance); 高级场景处理 为了避免将其他无需转换成String的Long类型转换,这里提供一个高级的用法， 思路很简单就是定义一个Id类型,通过实现Id类型的序列化和反序列化功能即可进行实现. 下面就用Gson和jackson来演示
+核心代码 //Gson GsonBuilder builder = new GsonBuilder(); builder.registerTypeAdapter(Id.class, (JsonSerializer<Id>) (src, typeOfSrc, context) -> new JsonPrimitive(src.getVal())); builder.registerTypeAdapter(Id.class, (JsonDeserializer<Id>) (json, typeOfT, context) -> new Id(json.getAsLong())); Gson gson = builder.create(); User user = new User(); user.setUserId(new Id(11111L)); user."><meta property="og:type" content="article"><meta property="og:url" content="https://youkale.github.io/posts/%E7%94%B1js%E7%B2%BE%E5%BA%A6%E7%BC%BA%E5%A4%B1%E5%BC%95%E5%8F%91%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%8A%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2018-11-18T12:10:54+00:00"><meta property="article:modified_time" content="2018-11-18T12:10:54+00:00"><title>(-> c r u d)</title><link rel=canonical href=https://youkale.github.io/posts/%E7%94%B1js%E7%B2%BE%E5%BA%A6%E7%BC%BA%E5%A4%B1%E5%BC%95%E5%8F%91%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%8A%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95/><link rel=preload href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.6b1a4fbc48955b72aea7913e43fabeb45e8bc120da5aa41b598dd33adcac4b59.css integrity="sha256-axpPvEiVW3Kup5E+Q/q+tF6LwSDaWqQbWY3TOtysS1k=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.39e41a7f16bdf8cb16e43cae7d714fa1016f1d2d2898a5b3f27f42c9979204e2.css integrity="sha256-OeQafxa9+MsW5DyufXFPoQFvHS0omKWz8n9CyZeSBOI=" crossorigin=anonymous media=screen><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5><meta name=generator content="Hugo 0.100.1"></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=/>(-> c r u d)</a>
+<input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/posts/>文章</a></li><li class=navigation-item><a class=navigation-link href=/about/>关于</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://youkale.github.io/posts/%E7%94%B1js%E7%B2%BE%E5%BA%A6%E7%BC%BA%E5%A4%B1%E5%BC%95%E5%8F%91%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%8A%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95/>由js精度缺失引发的问题及处理方法</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa fa-calendar" aria-hidden=true></i>
+<time datetime=2018-11-18T12:10:54Z>2018-11-18</time></span>
+<span class=reading-time><i class="fa fa-clock-o" aria-hidden=true></i></span></div></div></header><div><h1 id=问题场景>问题场景
+<a class=heading-link href=#%e9%97%ae%e9%a2%98%e5%9c%ba%e6%99%af><i class="fa fa-link" aria-hidden=true></i></a></h1><pre><code>在使用java的Long类型过程中,当这个Long类型数值超过 1^0+1^1+1^2+...1^58的范围后就会引发精度丢失, 详见JS[IEEE754规范](https://en.wikipedia.org/wiki/IEEE_754)
+常见的现象就是比如:1000967854800048128,通过js转换成Number类型成为了:1000967854800048100, 由此会引发一系列问题,比如当年著名的爱国者导弹.
+因为精度缺失造成问题,大多数情况发生在前后端交互过程中,那么下面就分别说说处理方法
+</code></pre><h2 id=普通场景的处理方法>普通场景的处理方法
+<a class=heading-link href=#%e6%99%ae%e9%80%9a%e5%9c%ba%e6%99%af%e7%9a%84%e5%a4%84%e7%90%86%e6%96%b9%e6%b3%95><i class="fa fa-link" aria-hidden=true></i></a></h2><blockquote><p>简单的处理方法，jackson,gson等json工具包已经包含了Long类型处理方法了,基本上都是转String.</p></blockquote><h3 id=gson处理方法>gson处理方法
+<a class=heading-link href=#gson%e5%a4%84%e7%90%86%e6%96%b9%e6%b3%95><i class="fa fa-link" aria-hidden=true></i></a></h3><pre><code>GsonBuilder builder = new GsonBuilder();
+//默认将所有的Long转换成String
+builder.setLongSerializationPolicy(LongSerializationPolicy.STRING);
+</code></pre><h3 id=jackson处理方法>jackson处理方法
+<a class=heading-link href=#jackson%e5%a4%84%e7%90%86%e6%96%b9%e6%b3%95><i class="fa fa-link" aria-hidden=true></i></a></h3><pre><code>ObjectMapper objectMapper = new ObjectMapper();
+SimpleModule module = new SimpleModule();
+module.addSerializer(Long.class, ToStringSerializer.instance);
+module.addSerializer(Long.TYPE, ToStringSerializer.instance);
+</code></pre><h2 id=高级场景处理>高级场景处理
+<a class=heading-link href=#%e9%ab%98%e7%ba%a7%e5%9c%ba%e6%99%af%e5%a4%84%e7%90%86><i class="fa fa-link" aria-hidden=true></i></a></h2><blockquote><p>为了避免将其他无需转换成String的Long类型转换,这里提供一个高级的用法，
+思路很简单就是定义一个Id类型,通过实现Id类型的序列化和反序列化功能即可进行实现.
+下面就用Gson和jackson来演示</p></blockquote><h3 id=核心代码>核心代码
+<a class=heading-link href=#%e6%a0%b8%e5%bf%83%e4%bb%a3%e7%a0%81><i class="fa fa-link" aria-hidden=true></i></a></h3><pre><code>    //Gson
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(Id.class, (JsonSerializer&lt;Id&gt;) (src, typeOfSrc, context) -&gt;
+            new JsonPrimitive(src.getVal()));
+    builder.registerTypeAdapter(Id.class, (JsonDeserializer&lt;Id&gt;) (json, typeOfT, context) -&gt;
+            new Id(json.getAsLong()));
+    Gson gson = builder.create();
+    User user = new User();
+    user.setUserId(new Id(11111L));
+    user.setUserName(&quot;youkale.github.io&quot;);
+
+    String s = gson.toJson(user);
+    System.out.println(s);
+
+    User user1 = gson.fromJson(s, User.class);
+    System.out.println(&quot;gson  &quot; + user1);
+
+    //Jackson
+    ObjectMapper objectMapper = new ObjectMapper();
+    SimpleModule module = new SimpleModule();
+    module.addSerializer(Id.class, new IdJacksonSerializer(Id.class));
+    module.addDeserializer(Id.class, new IdJacksonDeserializer(Id.class));
+    objectMapper.registerModule(module);
+    String s1 = objectMapper.writeValueAsString(user);
+    System.out.println(s1);
+    User user2 = objectMapper.readValue(s1, User.class);
+    System.out.println(&quot;jackson  &quot; + user2);
+</code></pre><h3 id=定义类user>定义类User
+<a class=heading-link href=#%e5%ae%9a%e4%b9%89%e7%b1%bbuser><i class="fa fa-link" aria-hidden=true></i></a></h3><pre><code>public static class User {
+
+    private Id userId;
+
+    private String userName;
+
+    public Id getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Id userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;User{&quot; +
+                &quot;userId=&quot; + userId +
+                &quot;, userName='&quot; + userName + '\'' +
+                '}';
+    }
+}
+</code></pre><h3 id=定义id类>定义Id类
+<a class=heading-link href=#%e5%ae%9a%e4%b9%89id%e7%b1%bb><i class="fa fa-link" aria-hidden=true></i></a></h3><pre><code>public static class Id {
+
+    private final Long val;
+
+    public Long getVal() {
+        return val;
+    }
+
+    public Id(Long val) {
+        this.val = val;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(val);
+    }
+}
+</code></pre><h3 id=jackson序列反序列实现>jackson序列反序列实现
+<a class=heading-link href=#jackson%e5%ba%8f%e5%88%97%e5%8f%8d%e5%ba%8f%e5%88%97%e5%ae%9e%e7%8e%b0><i class="fa fa-link" aria-hidden=true></i></a></h3><pre><code>public static class IdJacksonDeserializer extends StdDeserializer&lt;Id&gt; {
+    public IdJacksonDeserializer(Class&lt;?&gt; vc) {
+        super(vc);
+    }
+
+    @Override
+    public Id deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+        return new Id(p.getValueAsLong());
+    }
+}
+
+public static class IdJacksonSerializer extends StdSerializer&lt;Id&gt; {
+
+    public IdJacksonSerializer(Class&lt;Id&gt; t) {
+        super(t);
+    }
+    @Override
+    public void serialize(Id value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeString(String.valueOf(value.getVal()));
+    }
+}
+</code></pre><h1 id=总结>总结
+<a class=heading-link href=#%e6%80%bb%e7%bb%93><i class="fa fa-link" aria-hidden=true></i></a></h1><blockquote><p>从Gson和jackson的API看出这类的功能老早就由大神们想到了,有时候总在感叹,自己多渺小.</p></blockquote></div><footer></footer></article></section></div><footer class=footer><section class=container>©
+2022
+Youkale
+·
+<a href=https://gohugo.io/>Hugo</a> & <a href=https://github.com/luizdepra/hugo-coder/>Coder</a>.</section></footer></main><script src=/js/coder.min.f411a1043e37c7c14dfb03f4d94d60d9ee69cfa413b16d0fd4f28695babb82bb.js integrity="sha256-9BGhBD43x8FN+wP02U1g2e5pz6QTsW0P1PKGlbq7grs="></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-H9CHLFCJFP"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-H9CHLFCJFP')</script></body></html>

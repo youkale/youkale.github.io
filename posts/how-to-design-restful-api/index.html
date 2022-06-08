@@ -1,0 +1,257 @@
+<!doctype html><html lang=zh><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta http-equiv=content-security-policy content="upgrade-insecure-requests; block-all-mixed-content; default-src 'self'; child-src 'self'; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net/; form-action 'self'; frame-src 'self'; img-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdn.jsdelivr.net/; script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://cdn.jsdelivr.net/; prefetch-src 'self'; connect-src 'self' https://www.google-analytics.com;"><meta name=author content="Youkale"><meta name=description content="rest API常见设计错误"><meta name=keywords content="rest,kafka,房东网络,clojure,golang,redis,程序员,developer,数据集成,pipeline,rule engine"><meta name=twitter:card content="summary"><meta name=twitter:title content="如何设计RESTful API"><meta name=twitter:description content="rest API常见设计错误"><meta property="og:title" content="如何设计RESTful API"><meta property="og:description" content="rest API常见设计错误"><meta property="og:type" content="article"><meta property="og:url" content="https://youkale.github.io/posts/how-to-design-restful-api/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-05-21T12:32:29+08:00"><meta property="article:modified_time" content="2022-05-21T12:32:29+08:00"><title>(-> c r u d)</title><link rel=canonical href=https://youkale.github.io/posts/how-to-design-restful-api/><link rel=preload href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.6b1a4fbc48955b72aea7913e43fabeb45e8bc120da5aa41b598dd33adcac4b59.css integrity="sha256-axpPvEiVW3Kup5E+Q/q+tF6LwSDaWqQbWY3TOtysS1k=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.39e41a7f16bdf8cb16e43cae7d714fa1016f1d2d2898a5b3f27f42c9979204e2.css integrity="sha256-OeQafxa9+MsW5DyufXFPoQFvHS0omKWz8n9CyZeSBOI=" crossorigin=anonymous media=screen><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5><meta name=generator content="Hugo 0.100.1"></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=/>(-> c r u d)</a>
+<input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/posts/>文章</a></li><li class=navigation-item><a class=navigation-link href=/about/>关于</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://youkale.github.io/posts/how-to-design-restful-api/>如何设计RESTful API</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa fa-calendar" aria-hidden=true></i>
+<time datetime=2022-05-21T12:32:29+08:00>2022-05-21</time></span>
+<span class=reading-time><i class="fa fa-clock-o" aria-hidden=true></i></span></div><div class=tags><i class="fa fa-tag" aria-hidden=true></i>
+<span class=tag><a href=/tags/rest/>rest</a></span></div></div></header><div><h2 id=什么是rest>什么是REST
+<a class=heading-link href=#%e4%bb%80%e4%b9%88%e6%98%afrest><i class="fa fa-link" aria-hidden=true></i></a></h2><p>Wiki中REST全称是 (<strong>Representational State Transfer</strong>) &ldquo;表现层状态转换&rdquo;, 也有翻译是“表征状态转移”，是<a href=https://en.wikipedia.org/wiki/Representational_state_transfer>Roy Thomas Fielding</a>博士在2000年提出的一种基于Http协议的软件架构风格。<strong>表征状态转移</strong>,听起来很晦涩，是因为前面主语 <code>Resource</code> 被去掉了，真正的全称是 <strong>Resource Representational State Transfer</strong> 也就是: 资源在网络中以某种表现形式进行状态转移。</p><ul><li>Resource：资源，即数据（前面说过网络的核心）。比如 users，corp等；</li><li>Representational：某种表现形式，比如用JSON，XML，JPEG等；</li><li>State Transfer：状态变化。通过HTTP动词实现。</li></ul><h2 id=rest等级httpsmartinfowlercomarticlesrichardsonmaturitymodelhtmllevel0><a href=https://martinfowler.com/articles/richardsonMaturityModel.html#level0>REST等级</a>
+<a class=heading-link href=#rest%e7%ad%89%e7%ba%a7httpsmartinfowlercomarticlesrichardsonmaturitymodelhtmllevel0><i class="fa fa-link" aria-hidden=true></i></a></h2><h3 id=level-0-the-ramp-of-plain-old-xml>Level-0 The Ramp of Plain Old XML
+<a class=heading-link href=#level-0-the-ramp-of-plain-old-xml><i class="fa fa-link" aria-hidden=true></i></a></h3><h5 id=说明>说明
+<a class=heading-link href=#%e8%af%b4%e6%98%8e><i class="fa fa-link" aria-hidden=true></i></a></h5><p>服务端使用统一的请求路径，通过请求体中某个字段定义业务类型，需要定义错误码。</p><h4 id=调用>调用
+<a class=heading-link href=#%e8%b0%83%e7%94%a8><i class="fa fa-link" aria-hidden=true></i></a></h4><p>对照文档中<code> action</code> 类型进行传参, 同时对响应错误码进行处理。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>POST /server 
+</span></span><span style=display:flex><span>Content-Type: Application/json
+</span></span><span style=display:flex><span><span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>   <span style=color:#e6db74>&#34;action&#34;</span>:<span style=color:#e6db74>&#34;001&#34;</span>,
+</span></span><span style=display:flex><span>   <span style=color:#e6db74>&#34;data&#34;</span>: <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>   		<span style=color:#e6db74>&#34;username&#34;</span>:<span style=color:#e6db74>&#34;...&#34;</span>,
+</span></span><span style=display:flex><span>   <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>----- Response -----
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Status: <span style=color:#ae81ff>200</span>
+</span></span><span style=display:flex><span>Content-Type: application/json
+</span></span><span style=display:flex><span><span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>   <span style=color:#e6db74>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;A00001&#34;</span>
+</span></span><span style=display:flex><span>   <span style=color:#e6db74>&#34;data&#34;</span>: <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>   			....
+</span></span><span style=display:flex><span>   <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><h3 id=level-1-resource-引入资源的rpc>Level-1 Resource: 引入资源的RPC
+<a class=heading-link href=#level-1-resource-%e5%bc%95%e5%85%a5%e8%b5%84%e6%ba%90%e7%9a%84rpc><i class="fa fa-link" aria-hidden=true></i></a></h3><h4 id=说明-1>说明
+<a class=heading-link href=#%e8%af%b4%e6%98%8e-1><i class="fa fa-link" aria-hidden=true></i></a></h4><p>在微服务盛行的今天，引入了URI，方便网关层对请求进行转发，同时能通过URI能反映出对应的业务，需要定义错误码。</p><h4 id=调用-1>调用
+<a class=heading-link href=#%e8%b0%83%e7%94%a8-1><i class="fa fa-link" aria-hidden=true></i></a></h4><p>对照文档中资源动作，进行传递参数，同时对响应错误码进行处理。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>POST /user/add 
+</span></span><span style=display:flex><span>Content-Type: Application/json
+</span></span><span style=display:flex><span><span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>   <span style=color:#e6db74>&#34;username&#34;</span>:<span style=color:#e6db74>&#34;&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>----- Response -----
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Status: <span style=color:#ae81ff>200</span>
+</span></span><span style=display:flex><span>Content-Type: application/json
+</span></span><span style=display:flex><span><span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>   <span style=color:#e6db74>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;A00001&#34;</span>
+</span></span><span style=display:flex><span>   <span style=color:#e6db74>&#34;data&#34;</span>: <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>   			....
+</span></span><span style=display:flex><span>   <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><h3 id=level-2-http-verbs>Level-2 Http Verbs
+<a class=heading-link href=#level-2-http-verbs><i class="fa fa-link" aria-hidden=true></i></a></h3><h4 id=说明-2>说明
+<a class=heading-link href=#%e8%af%b4%e6%98%8e-2><i class="fa fa-link" aria-hidden=true></i></a></h4><ul><li>通过URI定位资源</li><li>通过Http Method管理资源</li><li>通过Http Status 来表示结果</li></ul><h4 id=调用-2>调用
+<a class=heading-link href=#%e8%b0%83%e7%94%a8-2><i class="fa fa-link" aria-hidden=true></i></a></h4><p>查看资源地址，对于有副作用的操作，需要查看文档。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>POST /users
+</span></span><span style=display:flex><span>Content-Type: Application/json
+</span></span><span style=display:flex><span><span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>   <span style=color:#e6db74>&#34;username&#34;</span>:<span style=color:#e6db74>&#34;&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>----- Response -----
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Status: <span style=color:#ae81ff>201</span>
+</span></span><span style=display:flex><span>Location: /users/1
+</span></span><span style=display:flex><span>.....
+</span></span><span style=display:flex><span>.....
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>GET /users/1
+</span></span><span style=display:flex><span>----- Response -----
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Status: <span style=color:#ae81ff>200</span>
+</span></span><span style=display:flex><span>Content-Type: Application/json
+</span></span><span style=display:flex><span><span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;username&#34;</span>:<span style=color:#e6db74>&#34;....&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>DELETE /users/1
+</span></span><span style=display:flex><span>----- Response -----
+</span></span><span style=display:flex><span>Status: <span style=color:#ae81ff>202</span>
+</span></span><span style=display:flex><span>....
+</span></span><span style=display:flex><span>....
+</span></span></code></pre></div><h3 id=level-3-hypermedia-controls--超媒体控制>Level-3 Hypermedia Controls : 超媒体控制
+<a class=heading-link href=#level-3-hypermedia-controls--%e8%b6%85%e5%aa%92%e4%bd%93%e6%8e%a7%e5%88%b6><i class="fa fa-link" aria-hidden=true></i></a></h3><h4 id=说明-3>说明：
+<a class=heading-link href=#%e8%af%b4%e6%98%8e-3><i class="fa fa-link" aria-hidden=true></i></a></h4><p>REST的设计者Roy T. Fielding在博客 <a href=http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven>REST APIs must be hypertext-driven</a> 中的几点原则强调非HATEOAS的系统不能称为RESTful。</p><ol><li><p>REST API决不能定义固定的资源名称或者层次关系</p></li><li><p>使用REST API应该只需要知道初始URI（书签）和一系列针对目标用户的标准媒体类型</p><blockquote><p>所有的链接都有服务端控制，即服务端改变了URI，客户端也不会被破坏</p></blockquote></li></ol><p>上面仅仅提到的是HATEOAS对REST的一些约束但是并没有说到具体的规范。好在现在已经出了几个基于HATEOAS的实现:</p><ul><li><p>HAL: Hypetext Application Language. <a href=https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-08>IETF草案</a></p><ul><li><a href=https://quarkus.io/guides/rest-data-panache>Quarkus 实现</a></li><li><a href=https://spring.io/projects/spring-hateoas>Spring 实现</a></li></ul></li><li><p><a href=https://github.com/kevinswiber/siren>Siren</a></p></li><li><p><a href=http://amundsen.com/media-types/collection/>Collection</a></p></li><li><p><a href=http://json-ld.org/>JSON-LD</a></p></li></ul><h2 id=hal规范>HAL规范
+<a class=heading-link href=#hal%e8%a7%84%e8%8c%83><i class="fa fa-link" aria-hidden=true></i></a></h2><p>HAL文档使用media type为 hal+json, 在http请求中为: <code>Content-Type: application/hal+json</code>。其ROOT对象必须是一个资源对象。</p><p>例如:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>GET /orders/523 HTTP/1.1
+</span></span><span style=display:flex><span>Host: example.org
+</span></span><span style=display:flex><span>Accept: application/hal+json
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>----- Response -----
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>HTTP/1.1 <span style=color:#ae81ff>200</span> OK
+</span></span><span style=display:flex><span>Content-Type: application/hal+json
+</span></span><span style=display:flex><span><span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;_links&#34;</span>: <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;self&#34;</span>: <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/orders/523&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;warehouse&#34;</span>: <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/warehouse/56&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>,
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;invoice&#34;</span>: <span style=color:#f92672>{</span>
+</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/invoices/873&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>}</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>}</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;currency&#34;</span>: <span style=color:#e6db74>&#34;USD&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;shipped&#34;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;total&#34;</span>: 10.2
+</span></span><span style=display:flex><span><span style=color:#f92672>}</span>
+</span></span></code></pre></div><h3 id=资源对象>资源对象
+<a class=heading-link href=#%e8%b5%84%e6%ba%90%e5%af%b9%e8%b1%a1><i class="fa fa-link" aria-hidden=true></i></a></h3><p>一个资源对象代表一个资源。</p><p>它有两个保留属性</p><p>_links: 包含一个指向其他资源的链接</p><p>_embedded: 可选属性， 它是一个对象，其属性名称是链接关系类型，其值是一个资源对象或一个资源对象数组。资源对象的数组。嵌入的资源可以是完整的、部分的或不一致的版本。嵌入资源可能是目标URI提供的完整、部分或不一致的表示。</p><h3 id=举个例子>举个例子
+<a class=heading-link href=#%e4%b8%be%e4%b8%aa%e4%be%8b%e5%ad%90><i class="fa fa-link" aria-hidden=true></i></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;_links&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;self&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/orders&#34;</span>
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;next&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/orders?page=2&#34;</span>
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;find&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/orders{?id}&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;templated&#34;</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;_embedded&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;orders&#34;</span>: [
+</span></span><span style=display:flex><span>      {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;_links&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;self&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/orders/123&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;basket&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/baskets/98712&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;customer&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/customers/7809&#34;</span>
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>        },
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;total&#34;</span>: <span style=color:#ae81ff>30</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;currency&#34;</span>: <span style=color:#e6db74>&#34;USD&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;shipped&#34;</span>
+</span></span><span style=display:flex><span>      },
+</span></span><span style=display:flex><span>      {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;_links&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;self&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/orders/124&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;basket&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/baskets/97213&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;customer&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/customers/12369&#34;</span>
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>        },
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;total&#34;</span>: <span style=color:#ae81ff>20</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;currency&#34;</span>: <span style=color:#e6db74>&#34;USD&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;status&#34;</span>: <span style=color:#e6db74>&#34;processing&#34;</span>
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    ]
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;currentlyProcessing&#34;</span>: <span style=color:#ae81ff>14</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;shippedToday&#34;</span>: <span style=color:#ae81ff>20</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=link-对象>Link 对象
+<a class=heading-link href=#link-%e5%af%b9%e8%b1%a1><i class="fa fa-link" aria-hidden=true></i></a></h3><ul><li>href –string 必填项，它的内容可以是URL 或者URL模板。</li><li>templated –bool 可选项，默认为false，如果href是URL模板则templated必须为true</li><li>type –string 可选项，它用来表示资源类型</li><li>deprecation –string 可选项，表示该对象会在未来废弃</li><li>name –string 可选项， 可能当作第二个key，当需要选择拥有相同name的链接时</li><li>profile –string 可选项，简要说明链接的内容</li><li>title –string 可选项，用用户可读的语言来描述资源的主题</li><li>hreflang –string 可选项，用来表明资源的语言</li></ul><h3 id=建议>建议
+<a class=heading-link href=#%e5%bb%ba%e8%ae%ae><i class="fa fa-link" aria-hidden=true></i></a></h3><ul><li>Self link</li><li>Link relations 链接关系</li></ul><h2 id=api-demo>API Demo
+<a class=heading-link href=#api-demo><i class="fa fa-link" aria-hidden=true></i></a></h2><h3 id=用户表>用户表
+<a class=heading-link href=#%e7%94%a8%e6%88%b7%e8%a1%a8><i class="fa fa-link" aria-hidden=true></i></a></h3><table><thead><tr><th>id</th><th>username</th><th>nickname</th><th style=text-align:center>sex</th></tr></thead><tbody><tr><td>1</td><td>zuifeng</td><td>风哥</td><td style=text-align:center>1</td></tr><tr><td>2</td><td>feige</td><td>飞哥</td><td style=text-align:center>1</td></tr><tr><td>3</td><td>ouyangfeng</td><td>锋哥</td><td style=text-align:center>1</td></tr><tr><td>4</td><td>tiantian</td><td>小甜甜</td><td style=text-align:center>1</td></tr></tbody></table><h3 id=订单表>订单表
+<a class=heading-link href=#%e8%ae%a2%e5%8d%95%e8%a1%a8><i class="fa fa-link" aria-hidden=true></i></a></h3><table><thead><tr><th>id</th><th style=text-align:left>order_code</th><th>Sku</th><th>amount</th><th style=text-align:center>user_id</th></tr></thead><tbody><tr><td>1</td><td style=text-align:left>ord_001</td><td>g_001</td><td>100</td><td style=text-align:center>3</td></tr><tr><td>2</td><td style=text-align:left>ord_002</td><td>g_002</td><td>98.5</td><td style=text-align:center>2</td></tr><tr><td>3</td><td style=text-align:left>ord_003</td><td>g_003</td><td>78.2</td><td style=text-align:center>1</td></tr><tr><td>4</td><td style=text-align:left>ord_004</td><td>g_004</td><td>33.5</td><td style=text-align:center>3</td></tr></tbody></table><h3 id=货品表>货品表
+<a class=heading-link href=#%e8%b4%a7%e5%93%81%e8%a1%a8><i class="fa fa-link" aria-hidden=true></i></a></h3><table><thead><tr><th>sku</th><th>spu</th><th>spec</th></tr></thead><tbody><tr><td>g_001</td><td>sp_001</td><td>大</td></tr><tr><td>g_002</td><td>sp_001</td><td>巨大</td></tr><tr><td>g_003</td><td>sp_002</td><td>超级大</td></tr><tr><td>g_004</td><td>sp_002</td><td>很大</td></tr></tbody></table><h4 id=获取用户信息>获取用户信息
+<a class=heading-link href=#%e8%8e%b7%e5%8f%96%e7%94%a8%e6%88%b7%e4%bf%a1%e6%81%af><i class="fa fa-link" aria-hidden=true></i></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>GET /users/1 
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>	<span style=color:#f92672>&#34;username&#34;</span>:<span style=color:#e6db74>&#34;zuifeng&#34;</span>,
+</span></span><span style=display:flex><span>	<span style=color:#f92672>&#34;nikename&#34;</span>:<span style=color:#e6db74>&#34;风哥&#34;</span><span style=color:#960050;background-color:#1e0010>，</span>
+</span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;_links&#34;</span>: {
+</span></span><span style=display:flex><span>	    <span style=color:#f92672>&#34;self&#34;</span>: {
+</span></span><span style=display:flex><span>	    	<span style=color:#f92672>&#34;href&#34;</span>:<span style=color:#e6db74>&#34;/users/1&#34;</span>
+</span></span><span style=display:flex><span>	    },
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;update&#34;</span>: {
+</span></span><span style=display:flex><span>         <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/users/1&#34;</span>
+</span></span><span style=display:flex><span>      },
+</span></span><span style=display:flex><span>     <span style=color:#f92672>&#34;orders&#34;</span>: {
+</span></span><span style=display:flex><span>       <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/orders{?page,pageSize}&#34;</span>,
+</span></span><span style=display:flex><span>       <span style=color:#f92672>&#34;templated&#34;</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>     }
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h4 id=获取订单>获取订单
+<a class=heading-link href=#%e8%8e%b7%e5%8f%96%e8%ae%a2%e5%8d%95><i class="fa fa-link" aria-hidden=true></i></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>GET /orders/3
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>	<span style=color:#f92672>&#34;order_code&#34;</span>:<span style=color:#e6db74>&#34;ord_003&#34;</span>,
+</span></span><span style=display:flex><span>	<span style=color:#f92672>&#34;sku&#34;</span>:<span style=color:#e6db74>&#34;g_004&#34;</span><span style=color:#960050;background-color:#1e0010>，</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;amount&#34;</span>:<span style=color:#e6db74>&#34;33.5&#34;</span>,
+</span></span><span style=display:flex><span>	<span style=color:#f92672>&#34;_links&#34;</span>: {
+</span></span><span style=display:flex><span>	    <span style=color:#f92672>&#34;self&#34;</span>: {<span style=color:#f92672>&#34;href&#34;</span>:<span style=color:#e6db74>&#34;/orders/3&#34;</span>},
+</span></span><span style=display:flex><span>			<span style=color:#f92672>&#34;cancel&#34;</span>: {<span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/orders/3:cancel&#34;</span>},
+</span></span><span style=display:flex><span>	    <span style=color:#f92672>&#34;goods&#34;</span>: {<span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/goods/g_004&#34;</span>}
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h4 id=订单列表>订单列表
+<a class=heading-link href=#%e8%ae%a2%e5%8d%95%e5%88%97%e8%a1%a8><i class="fa fa-link" aria-hidden=true></i></a></h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>GET /orders
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span>{
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;_links&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;self&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/orders&#34;</span>
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;prev&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/orders?page=1&#34;</span>
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;next&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/orders?page=3&#34;</span>
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;find&#34;</span>: {
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/orders{?id}&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#f92672>&#34;templated&#34;</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;_embedded&#34;</span>: {
+</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;orders&#34;</span>: [
+</span></span><span style=display:flex><span>      {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;order_code&#34;</span>: <span style=color:#e6db74>&#34;ord_003&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;sku&#34;</span>: <span style=color:#e6db74>&#34;g_004&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;amount&#34;</span>: <span style=color:#e6db74>&#34;33.5&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;_links&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;self&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/orders/3&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;cancel&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/orders/3:cancel&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;goods&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/goods/g_004&#34;</span>
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>      },
+</span></span><span style=display:flex><span>      {
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;order_code&#34;</span>: <span style=color:#e6db74>&#34;ord_003&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;sku&#34;</span>: <span style=color:#e6db74>&#34;g_004&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;amount&#34;</span>: <span style=color:#e6db74>&#34;33.5&#34;</span>,
+</span></span><span style=display:flex><span>        <span style=color:#f92672>&#34;_links&#34;</span>: {
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;self&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/orders/3&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;cancel&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/orders/3:cancel&#34;</span>
+</span></span><span style=display:flex><span>          },
+</span></span><span style=display:flex><span>          <span style=color:#f92672>&#34;goods&#34;</span>: {
+</span></span><span style=display:flex><span>            <span style=color:#f92672>&#34;href&#34;</span>: <span style=color:#e6db74>&#34;/goods/g_004&#34;</span>
+</span></span><span style=display:flex><span>          }
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    ]
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;currentPage&#34;</span>: <span style=color:#ae81ff>2</span>,
+</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;pageSize&#34;</span>: <span style=color:#ae81ff>2</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=参考>参考
+<a class=heading-link href=#%e5%8f%82%e8%80%83><i class="fa fa-link" aria-hidden=true></i></a></h2><p><a href=https://zh.wikipedia.org/wiki/%E8%A1%A8%E7%8E%B0%E5%B1%82%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2>https://zh.wikipedia.org/wiki/%E8%A1%A8%E7%8E%B0%E5%B1%82%E7%8A%B6%E6%80%81%E8%BD%AC%E6%8D%A2</a></p><p><a href=https://en.wikipedia.org/wiki/Hypertext_Application_Language>https://en.wikipedia.org/wiki/Hypertext_Application_Language</a></p><p><a href=https://martinfowler.com/articles/richardsonMaturityModel.html#level0>https://martinfowler.com/articles/richardsonMaturityModel.html#level0</a></p><p><a href=https://datatracker.ietf.org/doc/html/draft-kelly-json-hal>https://datatracker.ietf.org/doc/html/draft-kelly-json-hal</a></p></div><footer></footer></article></section></div><footer class=footer><section class=container>©
+2022
+Youkale
+·
+<a href=https://gohugo.io/>Hugo</a> & <a href=https://github.com/luizdepra/hugo-coder/>Coder</a>.</section></footer></main><script src=/js/coder.min.f411a1043e37c7c14dfb03f4d94d60d9ee69cfa413b16d0fd4f28695babb82bb.js integrity="sha256-9BGhBD43x8FN+wP02U1g2e5pz6QTsW0P1PKGlbq7grs="></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-H9CHLFCJFP"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-H9CHLFCJFP')</script></body></html>
