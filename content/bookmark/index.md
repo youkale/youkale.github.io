@@ -15,4 +15,3 @@ date: 2018-08-12 11:34:29
 -  [庄周梦蝶](http://blog.fnil.net/blog/archives/) Clojure、Golang、Ruby相关
 -  [Keep Coding-刘家财](https://liujiacai.net) Java、clojure相关的一个技术博客
 -  [迟大](https://www.skyzh.dev/posts/) 迟大、一个写数据库的大佬
--  [google](baidu.com) 
