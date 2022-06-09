@@ -2,7 +2,8 @@
 <input type=checkbox id=menu-toggle>
 <label class="menu-button float-right" for=menu-toggle><i class="fa fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li><li class=navigation-item><a class=navigation-link href=/bookmark/>收藏</a></li><li class=navigation-item><a class=navigation-link href=/about/>关于</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://youkale.github.io/posts/online-server-tcp-connect-optimization/>线上服务器TCP连接相关优化</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa fa-calendar" aria-hidden=true></i>
 <time datetime=2022-06-06T12:32:29+08:00>2022-06-06</time></span>
-<span class=reading-time><i class="fa fa-clock-o" aria-hidden=true></i></span></div><div class=tags><i class="fa fa-tag" aria-hidden=true></i>
+<span class=reading-time><i class="fa fa-clock-o" aria-hidden=true></i></span></div><div class=authors><i class="fa fa-user" aria-hidden=true></i>
+<a href=/authors/youkale/>Youkale</a></div><div class=tags><i class="fa fa-tag" aria-hidden=true></i>
 <span class=tag><a href=/tags/tcp/>TCP</a></span></div></div></header><div><h1 id=线上服务器tcp连接相关>线上服务器TCP连接相关
 <a class=heading-link href=#%e7%ba%bf%e4%b8%8a%e6%9c%8d%e5%8a%a1%e5%99%a8tcp%e8%bf%9e%e6%8e%a5%e7%9b%b8%e5%85%b3><i class="fa fa-link" aria-hidden=true></i></a></h1><hr><h3 id=为什么优化点在网络>为什么优化点在网络？
 <a class=heading-link href=#%e4%b8%ba%e4%bb%80%e4%b9%88%e4%bc%98%e5%8c%96%e7%82%b9%e5%9c%a8%e7%bd%91%e7%bb%9c><i class="fa fa-link" aria-hidden=true></i></a></h3><p>随着云平台的兴起, 传统自建数据库或者其他业务中间件的情况会比较少，而我们系统也主要集中在调用平台提供的服务。</p><p>因此今天主要讲的是网络相关内容。</p><h3 id=tcp-4次挥手>TCP-4次挥手
@@ -74,10 +75,7 @@ Read timed out 是在调用socket read后，指定时间内未收到响应时 jd
 </span></span><span style=display:flex><span>	<span style=color:#f92672>...</span>
 </span></span><span style=display:flex><span><span style=color:#f92672>}</span>
 </span></span></code></pre></div><h2 id=参考>参考
-<a class=heading-link href=#%e5%8f%82%e8%80%83><i class="fa fa-link" aria-hidden=true></i></a></h2><p><a href=https://datatracker.ietf.org/doc/html/rfc1323>RFC1323</a>
-<a href=https://hoswey.github.io/2019/07/23/%E6%B5%85%E8%B0%88Java%E4%B8%AD%E7%9A%84TCP%E8%B6%85%E6%97%B6/>浅谈Java中的TCP超时</a>
-<a href=https://www.jianshu.com/p/ade80fe11f58>HttpClient RetryHandler</a>
-<a href=https://www.baeldung.com/httpclient-connection-management>Apache HttpClient Example</a></p></div><footer></footer></article></section></div><footer class=footer><section class=container>©
+<a class=heading-link href=#%e5%8f%82%e8%80%83><i class="fa fa-link" aria-hidden=true></i></a></h2><ul><li><a href=https://datatracker.ietf.org/doc/html/rfc1323>RFC1323</a></li><li><a href=https://hoswey.github.io/2019/07/23/%E6%B5%85%E8%B0%88Java%E4%B8%AD%E7%9A%84TCP%E8%B6%85%E6%97%B6/>浅谈Java中的TCP超时</a></li><li><a href=https://www.jianshu.com/p/ade80fe11f58>HttpClient RetryHandler</a></li><li><a href=https://www.baeldung.com/httpclient-connection-management>Apache HttpClient Example</a></li></ul></div><footer></footer></article></section></div><footer class=footer><section class=container>©
 2022
 Youkale
 ·
