@@ -1,0 +1,30 @@
+name: Add to Collect
+
+on:
+  workflow_dispatch:
+    inputs:
+      text:
+        description: Add a single item to blog collect
+        type: string
+        required: true
+
+jobs:
+  add_to_collect:
+    name: Add item to collect
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: add line to file and commit
+        run: |
+          filename="content/bookmark/index.md"
+          echo "-  ${{ github.event.inputs.text }} " >> $filename
+
+          git config --local user.email "tdycxs@gmail.com"
+          git config --local user.name "youkale"
+          git add $filename
+          git commit -m "content added by github action"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
