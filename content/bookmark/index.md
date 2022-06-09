@@ -11,3 +11,7 @@ date: 2018-08-12 11:34:29
 -  [酷壳](https://coolshell.cn) 左耳朵耗子的博客
 -  [面向信仰](https://draveness.me) Golang、K8s还有其他各种不错博客的大佬
 -  [No Headback](https://xargin.com) Golang、哲学流派
+-  [鸟窝](https://colobu.com) Golang、网络编程相关
+-  [庄周梦蝶](http://blog.fnil.net/blog/archives/) Clojure、Golang、Ruby相关
+-  [Keep Coding-刘家财](https://liujiacai.net) Java、clojure相关的一个技术博客
+-  [迟大](https://www.skyzh.dev/posts/) 迟大、一个写数据库的大佬
