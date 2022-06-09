@@ -29,7 +29,6 @@ defaultContentLanguage = "zh"
 
 
 [params.utteranc]
-  enable = true
   repo = "youkale/youkale.github.io"
   issueTerm = "title"
   theme = "github-light"

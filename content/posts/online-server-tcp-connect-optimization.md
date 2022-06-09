@@ -4,7 +4,7 @@ date = 2022-06-06T12:32:29+08:00
 title = "线上服务器TCP连接相关优化"
 description = "TCP 连接优化、池化"
 slug = ""
-authors = []
+authors = ["Youkale"]
 tags = ["TCP"]
 categories = []
 externalLink = ""
@@ -184,7 +184,7 @@ public HttpRequestRetryHandler  retryHandler() {
 
 ## 参考
 
-[RFC1323](https://datatracker.ietf.org/doc/html/rfc1323)
-[浅谈Java中的TCP超时](https://hoswey.github.io/2019/07/23/%E6%B5%85%E8%B0%88Java%E4%B8%AD%E7%9A%84TCP%E8%B6%85%E6%97%B6/)
-[HttpClient RetryHandler](https://www.jianshu.com/p/ade80fe11f58)
-[Apache HttpClient Example](https://www.baeldung.com/httpclient-connection-management)
+- [RFC1323](https://datatracker.ietf.org/doc/html/rfc1323)
+- [浅谈Java中的TCP超时](https://hoswey.github.io/2019/07/23/%E6%B5%85%E8%B0%88Java%E4%B8%AD%E7%9A%84TCP%E8%B6%85%E6%97%B6/)
+- [HttpClient RetryHandler](https://www.jianshu.com/p/ade80fe11f58)
+- [Apache HttpClient Example](https://www.baeldung.com/httpclient-connection-management)
