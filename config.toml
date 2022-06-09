@@ -27,12 +27,6 @@ defaultContentLanguage = "zh"
   pygmentscodefences = true
   pygmentscodefencesguesssyntax = true
 
-[taxonomies]
-  category = "categories"
-  series = "series"
-  tag = "tags"
-  author = "authors"
-
 [params.utteranc]
   repo = "youkale/youkale.github.io"
   issueTerm = "title"
