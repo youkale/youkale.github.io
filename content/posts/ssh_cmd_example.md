@@ -38,10 +38,10 @@ Host server_1
     User ubuntu  																	
     ## 服务器端口
     Port 22  																			
-		## rsa私钥地址
-		IdentityFile ~/.ssh/server_rsa 
+    ## rsa私钥地址
+    IdentityFile ~/.ssh/server_rsa 
     ## 代理配置, 表示通过本地 socksv5 服务器进行代理
-		ProxyCommand nc -X 5 -x 127.0.0.1:8106 %h %p  
+    ProxyCommand nc -X 5 -x 127.0.0.1:8106 %h %p  
 
 
 ### 接下来可以直接在终端下面这样使用: 
