@@ -2,4 +2,4 @@
 涵盖以下内容: .ssh/config 配置
 常用映射
 远程-&amp;gt;本地 -L 本地-&amp;gt;远程 -R 动态代理 -D 其他ssh命令集
-scp ssh-copy-id ssh-keygen .ssh/config配置简要说明 ### ----------- ~/.ssh/config ----------- Host server_1 ## 你配置的服务器名称，可根据自己的喜好配置 HostName 223.5.5.5 ## ip 或者 domain, 可以访问的地址 User ubuntu ## 默认使用的用户名 Port 22 ## 服务器端口 IdentityFile ~/.ssh/server_rsa ## rsa私钥地址 ProxyCommand nc -X 5 -x 127.0.0.1:8106 %h %p ## 代理配置, 表示通过本地 socksv5 服务器进行代理 ### 接下来可以直接在终端下面这样使用: ### ----------- 使用方法 ----------- ~$ ssh server_1 跳板机例子: ### ----------- ~/.ssh/config ----------- Host jump HostName 223.</description></item></channel></rss>
+scp ssh-copy-id ssh-keygen .ssh/config配置简要说明 ### ----------- ~/.ssh/config ----------- ## 你配置的服务器名称，可根据自己的喜好配置, 我这里配置的是 server_1 Host server_1 ## ip 或者 domain, 可以访问的地址 HostName 223.5.5.5 ## 默认使用的用户名 User ubuntu ## 服务器端口 Port 22 ## rsa私钥地址 IdentityFile ~/.ssh/server_rsa ## 代理配置, 表示通过本地 socksv5 服务器进行代理 ProxyCommand nc -X 5 -x 127.0.0.1:8106 %h %p ### 接下来可以直接在终端下面这样使用: ### ----------- 使用方法 ----------- ### 使用上面配置的 server_1 ~$ ssh server_1 跳板机例子: ### ----------- ~/.</description></item></channel></rss>
