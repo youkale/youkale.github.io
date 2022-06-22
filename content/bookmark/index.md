@@ -16,3 +16,4 @@ date: 2018-08-12 11:34:29
 -  [Keep Coding-刘家财](https://liujiacai.net) Java、clojure相关的一个技术博客
 -  [迟大](https://www.skyzh.dev/posts/) 迟大、一个写数据库的大佬
 -  [英语句型分析](http://enpuz.com/) 
+-  [青岛红创](http://blog.3vyd.com/blog/) 一个抠脚/Java博客 
