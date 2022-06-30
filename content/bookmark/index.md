@@ -3,7 +3,11 @@ title: 收藏
 date: 2018-08-12 11:34:29
 ---
 
+## 值得细读
+-  [认清性能问题](https://mp.weixin.qq.com/s/-M2EfUc_XLKnU049T49ZWA)  
 
+
+## 收藏的大佬博客
 -  [explain-shell](https://explainshell.com) shell 执行计划，类似SQL的explain 
 -  [伊洪-github](https://github.com/yihong0618/gitblog) 大连一个大佬
 -  [王垠](http://www.yinwang.org) 王垠的博客
