@@ -24,3 +24,4 @@ date: 2022-07-01 09:34:29
 - [英语句型分析](http://enpuz.com/) 
 - [explain-shell](https://explainshell.com) shell 执行计划，类似SQL的explain 
 - [制作Logo](https://zh.wix.com)
+- [shodan](https://www.shodan.io)
